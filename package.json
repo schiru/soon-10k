@@ -1,0 +1,22 @@
+{
+  "name": "soon-10k",
+  "version": "0.0.1",
+  "description": "A simple social countdown platform.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schiru/soon-10k.git"
+  },
+  "author": "Thomas Jirout and Wolfgang Rumpler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/schiru/soon-10k/issues"
+  },
+  "homepage": "https://github.com/schiru/soon-10k#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
