@@ -1,0 +1,10 @@
+#cf { // create form
+  input, textarea {
+    margin: 10px auto;
+    width: 300px;
+    display: block;
+  }
+  textarea {
+    height: 100px;
+  }
+}

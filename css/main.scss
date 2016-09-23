@@ -1,0 +1,88 @@
+@import "partials/colors";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  color: $main-font-color-default;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+input, button, a.butt, textarea {
+  height: 20px;
+  box-sizing: content-box;
+  border-radius: 3px;
+  padding: 10px 10px;
+  vertical-align: middle;
+  font-size: 18px;
+  border: 1px solid $main-color-dark;
+}
+
+button, a.butt {
+  color: $main-font-color-light;
+  text-decoration: none;
+  background-color: $main-color-default;
+}
+
+body {
+  background-color: lighten($main-color-light, 30%);
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.5) 35px, rgba(255,255,255,.5) 50px);
+}
+
+header {
+  padding: 20px;
+  background: rgba(0, 0, 0, .2);
+}
+
+footer {
+  padding: 20px;
+}
+
+nav.nav { // traditional nav bar
+  background-color: $main-color-dark;
+  ul {
+    margin: 0;
+    padding: 10px;
+    text-align: left;
+    & > li {
+      display: inline;
+      padding: 5px;
+      a {
+        color: $light-grey;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.c { // container class
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.col3 {
+  column-count: 1;
+  /* Tablet and up */
+  @media (min-width: 768px) {
+    column-count: 3;
+  }
+}
+
+.dark {
+  background-color: $main-color-dark;
+  color: $light-grey;
+}
+
+.darker {
+  background-color: $dark-grey;
+  color: $light-grey;
+}
+
+@import "partials/index";
+@import "partials/create";
+@import "partials/detail";
