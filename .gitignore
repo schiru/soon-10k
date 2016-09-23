@@ -1,3 +1,7 @@
+# soon specific
+soon.db
+.DS_Store
+
 # Logs
 logs
 *.log
