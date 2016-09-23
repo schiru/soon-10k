@@ -1,5 +1,9 @@
 @import "partials/colors";
 
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -14,11 +18,12 @@ ul {
 }
 
 input, button, a.butt, textarea {
-  height: 20px;
+  height: 40px;
   font-family: sans-serif;
-  box-sizing: content-box;
+  box-sizing: border-box;
   border-radius: 3px;
   padding: 10px 10px;
+  margin: 10px auto;
   vertical-align: middle;
   font-size: 18px;
   border: 1px solid $main-color-dark;
@@ -66,6 +71,8 @@ nav.nav { // traditional nav bar
 
 .c { // container class
   max-width: 1024px;
+  width: 100%;
+  padding: 0 20px;
   margin: 0 auto;
   flex-grow: 1;
 }
@@ -91,6 +98,7 @@ nav.nav { // traditional nav bar
 .dark {
   background-color: $main-color-dark;
   color: $light-grey;
+  padding: 30px 20px;
 }
 
 .darker {

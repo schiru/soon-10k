@@ -1,11 +1,26 @@
 #cf { // create form
-  padding: 0 0 30px 0;
+  max-width: 100%;
+  width: 500px;
+  margin: 0 auto;
   input, textarea {
     margin: 10px auto;
-    width: 300px;
-    display: block;
+    width: 100%;
   }
   textarea {
     height: 100px;
+  }
+}
+
+#tinp {
+  $tinp-gutter-width: 20px;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  margin-right: -$tinp-gutter-width;
+  input {
+    width: 100px;
+    flex-grow: 1;
+    display: inline-block;
+    margin-right: $tinp-gutter-width;
   }
 }
