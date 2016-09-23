@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var compression = require('compression');
 var exphbs	= require('express-handlebars');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./soon.db');
@@ -34,6 +35,7 @@ var app = express();
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.use(compression());
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
