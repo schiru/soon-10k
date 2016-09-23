@@ -73,7 +73,7 @@ nav.nav { // traditional nav bar
   max-width: 1024px;
   width: 100%;
   padding: 0 20px;
-  margin: 0 auto;
+  margin: 10px auto !important;
   flex-grow: 1;
 }
 
@@ -83,6 +83,9 @@ nav.nav { // traditional nav bar
   /* Tablet and up */
   @media (min-width: 768px) {
     flex-direction: row;
+    > * {
+      flex-grow: 1;
+    }
   }
 }
 
@@ -91,7 +94,7 @@ nav.nav { // traditional nav bar
   box-shadow: 0 2px 3px rgba(0,0,0,.4);
   background-color: $main-color-default;
   overflow: hidden;
-  margin: 20px 10px;
+  margin: 10px;
   padding: 10px;
 }
 

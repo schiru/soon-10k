@@ -22,3 +22,16 @@
     }
   }
 }
+
+.ex { // example (popular, recent, ending soon)
+  a {
+    text-decoration: none;
+    color: white;
+    text-align: left;
+    display: block;
+    h3 {
+      text-decoration: none;
+      margin-bottom: 5px;
+    }
+  }
+}
