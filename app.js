@@ -1,5 +1,6 @@
 var express = require('express');
-var exphbs  = require('express-handlebars');
+var bodyParser = require('body-parser');
+var exphbs	= require('express-handlebars');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./soon.db');
 
@@ -34,17 +35,24 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get(['/', 'index'], function (req, res) {
-    res.render('index', {
+		res.render('index', {
 			title: "Soon"
 		});
 });
 
 app.get('/create', function (req, res) {
-    res.render('create', {
+		res.render('create', {
 			title: "Create Countdown - Soon"
 		});
+});
+
+app.post('/create', function (req, res) {
+		console.log(req.body);
+		res.redirect('/c/1'); // static dummy redirect
 });
 
 app.get('/c/:id', function (req, res) {
@@ -92,7 +100,7 @@ app.get('/c/:id', function (req, res) {
 });
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+	console.log('Example app listening on port 3000!');
 });
 
 function cleanup() {
