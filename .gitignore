@@ -2,6 +2,10 @@
 soon.db
 .DS_Store
 
+# Sass
+.sass-cache
+public/css/*.css*
+
 # Logs
 logs
 *.log
@@ -44,6 +48,3 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 0
-
-# Sass
-.sass-cache
