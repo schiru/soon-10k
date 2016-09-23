@@ -14,7 +14,23 @@
   }
 }
 
-.col3 > aside {
-  overflow: hidden;
-  padding: 0 20px;
+section.col3 {
+  padding: 30px 20px;
+  aside {
+    border-radius: 3px;
+    box-shadow: 0 2px 3px rgba(0,0,0,.4);
+    background-color: $main-color-default;
+    overflow: hidden;
+    margin: 20px 10px;
+    h2 {
+      margin: 0;
+      padding: 10px;
+      border-bottom: 1px solid $main-color-dark;
+    }
+    ul {
+      margin: 0;
+      padding: 10px;
+      background-color: $main-color-light;
+    }
+  }
 }
