@@ -15,6 +15,7 @@ ul {
 
 input, button, a.butt, textarea {
   height: 20px;
+  font-family: sans-serif;
   box-sizing: content-box;
   border-radius: 3px;
   padding: 10px 10px;
@@ -30,6 +31,9 @@ button, a.butt {
 }
 
 body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: lighten($main-color-light, 30%);
   background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,0.5) 35px, rgba(255,255,255,.5) 50px);
 }
@@ -63,6 +67,7 @@ nav.nav { // traditional nav bar
 .c { // container class
   max-width: 1024px;
   margin: 0 auto;
+  flex-grow: 1;
 }
 
 .col3 {
@@ -72,6 +77,15 @@ nav.nav { // traditional nav bar
   @media (min-width: 768px) {
     flex-direction: row;
   }
+}
+
+.card {
+  border-radius: 3px;
+  box-shadow: 0 2px 3px rgba(0,0,0,.4);
+  background-color: $main-color-default;
+  overflow: hidden;
+  margin: 20px 10px;
+  padding: 10px;
 }
 
 .dark {
