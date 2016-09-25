@@ -52,43 +52,43 @@ app.get('/create', function (req, res) {
 		});
 });
 
-app.post('/create', function (req, res) {
-		console.log(req.body);
+app.post('/create', function(req, res) {
+	var createHelpers = require('./createHelpers');
 
-		var start = new Date().getTime();
-		var durationSeconds = (parseInt(req.body.seconds))
-												+ (parseInt(req.body.minutes)*60)
-												+ (parseInt(req.body.hours)*60*60)
-												+ (parseInt(req.body.days)*24*60*60);
-		var end = start + durationSeconds*1000;
+	createHelpers.validateInput(req, res, function(isValid, errors) {
 
-		var values = {
-			'$title': req.body.title,
-			'$description': req.body.description,
-			'$startTimestamp': start,
-			'$endTimestamp': end,
-			'$createdTimestamp': start,
-			'$deletePassphrase': 'DELETE'
+		if (isValid) {
+
+			var values = createHelpers.generateValues(req, res);
+
+			var sql = `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
+							VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`;
+
+			var sqlStatement = db.prepare(sql, values, error => {
+				if (error != null) {
+					console.log(error);
+					throw error;
+				}
+			});
+
+			sqlStatement.run(function(error) {
+				if(error != null) {
+					console.log(error);
+					throw error;
+				}
+
+				// TODO: insert hash tags into database
+				var hashtagArray = createHelpers.generateHashtagArray(req.body.twitterHashtags);
+
+				res.redirect('/c/'+this.lastID); // redirect to new created countdown
+			});
+
+		} else {
+			console.log(errors);
+			res.render('create', {'body': req.body, 'errors': errors}); // render create page with current values and errors
 		}
 
-		console.log(values);
-
-		var sql = `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
-						VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`;
-
-		var sqlStatement = db.prepare(sql, values, error => {
-			if (error != null) {
-				throw error;
-			}
-		});
-
-		sqlStatement.run(function(error) {
-			if(error != null) {
-				throw error;
-			}
-
-			res.redirect('/c/'+this.lastID); // redirect to new created countdown
-		});
+	});
 });
 
 app.get('/c/:id', function (req, res) {

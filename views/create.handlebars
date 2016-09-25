@@ -1,15 +1,74 @@
 <section class="c">
+
+	{{#if errors}}
+		<ul>
+		{{#each errors}}
+			<li>{{this}}</li>
+		{{/each}}
+		<ul>
+	{{/if}}
+
 	<h2>Create new Countdown</h2>
 	<form id="cf" method="post" action="/create">
-		<input type="text" placeholder="Title" name="title">
-		<textarea placeholder="Description" name="description"></textarea>
-		<div id="tinp">
-			<input type="number" min="0" name="days" placeholder="days" value="">
-			<input type="number" min="0" name="hours" placeholder="hours">
-			<input type="number" min="0" name="minutes" placeholder="minutes">
-			<input type="number" min="0" name="seconds" placeholder="seconds">
+		<label>
+			Title
+			<input type="text" placeholder="Title" name="title" value="{{body.title}}">
+		</label>
+
+		<label>
+			Description
+			<textarea placeholder="Description" name="description">{{body.description}}</textarea>
+		</label>
+
+		<div id=cd_type"">
+			<label>
+				Target date:
+				<input type="radio" name="cdType" value="abs" checked>
+			</label>
+			<label>
+				Relative time from now:
+				<input type="radio" name="cdType" value="rel">
+			</labe>
 		</div>
-		<input type="text" placeholder="Associated Twitter Hashtag" name="twitter-hashtag">
+
+		<div id="abs_inp">
+			<h3>Target date</h3>
+			<label>
+				Date (YYYY-MM-DD):
+				<input type="text" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
+			</label>
+			<label>
+				Time (HH:MM:SS):
+				<input type="text" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
+			</label>
+		</div>
+
+		<div id="rel_inp">
+			<h3>Relative time</h3>
+			<div id="tinp">
+				<label>
+					Days:
+					<input type="number" min="0" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{else}}0{{/if}}">
+				</label>
+				<label>
+					Hours:
+					<input type="number" min="0" name="hours" placeholder="hours" value="{{#if body}}{{body.hours}}{{else}}0{{/if}}">
+				</label>
+				<label>
+					Minutes:
+					<input type="number" min="0" name="minutes" placeholder="minutes" value="{{#if body}}{{body.minutes}}{{else}}0{{/if}}">
+				</label>
+				<label>
+					Seconds:
+					<input type="number" min="0" name="seconds" placeholder="seconds" value="{{#if body}}{{body.seconds}}{{else}}0{{/if}}">
+				</label>
+			</div>
+		</div>
+
+		<label>
+			Associated Twitter Hashtag
+			<input type="text" placeholder="Associated Twitter Hashtag" name="twitterHashtags" value="{{body.twitterHashtags}}">
+		</label>
 		<button type="submit">Create</button>
 		<a href="/">Cancel and go back</a>
 	</form>
