@@ -8,12 +8,12 @@
 </nav>
 <article id="countdown" class="c">
 	<h2>{{cTitle}}</h2>
+	{{#if percentageVisible}}
 	<div class="bar">
-		{{#if cPercentage}}
 		<span class="lable">{{cPercentage}}% completed</span>
 	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress 60s linear 1 forwards;"></span>
-		{{/if}}
 	</div>
+	{{/if}}
 	<p>x days, y hours, z minutes and z seconds left</p>
 	<p>Ending at {{cEndDate}}</p>
 	<p>{{cDescription}}</p>

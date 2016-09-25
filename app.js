@@ -91,6 +91,7 @@ app.get('/c/:id', function (req, res) {
 			let totalDiff = end - start;
 			let currentDiff = end - now;
 			if (totalDiff > 0 && currentDiff < totalDiff) {
+				debugger;
 				percentage = 100 - (100*(currentDiff/totalDiff));
 				percentage = Math.round(percentage);
 			}
@@ -111,7 +112,8 @@ app.get('/c/:id', function (req, res) {
 					cEndDate: new Date(info.endTimestamp).toISOString(),
 					cHashtags: hashtags,
 					cPercentage: percentage,
-					cPercentageBarValue: percentage/2
+					cPercentageBarValue: percentage/2,
+					percentageVisible: percentage != null
 				});
 		});
 	});
