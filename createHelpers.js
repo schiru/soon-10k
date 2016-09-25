@@ -1,3 +1,65 @@
+const SQL_STATEMENTS = require('./sqlStatements');
+const sqlite3 = require('sqlite3').verbose();
+const db = global.db;
+
+module.exports.createCountdown = function(values, hashtagsArray) {
+	let statement = SQL_STATEMENTS.insert.createCountdown;
+	let promise = new Promise((resolve, reject) => {
+
+		executeInsertStatement(statement, values).then(createdCountdownId => {
+			console.log('countdown created, id: ' + createdCountdownId);
+			hashtagsArray.forEach(hashtag => {
+				createHashtag(hashtag).then(createdHashtagId => {
+					return associateHashtagAndCountdown(createdHashtagId, createdCountdownId);
+				});
+			})
+		});
+	});
+
+	return promise;
+}
+
+function createHashtag(title) {
+	let statement = SQL_STATEMENTS.insert.createHashtag;
+	let promise = new Promise((resolve, reject) => {
+		console.log('creating Hashtag');
+		resolve();
+	})
+
+	return promise;
+};
+
+function associateHashtagAndCountdown(hashtagId, countdownId) {
+	console.log('assigning hashtag and countdown');
+	return null;
+}
+
+function executeInsertStatement(statement, values) {
+	console.log('executing sql statement');
+	let promise = new Promise((resolve, reject) => {
+		let preparedStatement = db.prepare(statement);
+		preparedStatement.bind(values, error => {
+			if (error != null) {
+				console.error(error);
+				throw error;
+			}
+
+			debugger;
+			console.log('running prepared statement');
+			preparedStatement.run(function(error) {
+				if (error != null) {
+					console.error(error);
+					throw error;
+				}
+
+				resolve(this.lastID);
+			});
+		});
+	});
+
+	return promise;
+}
+
 module.exports.validateInput = function (req, res, callback) {
 	var values = req.body;
 	var errors = [];
@@ -89,7 +151,7 @@ module.exports.generateValues = function (req, res) {
 };
 
 /**
- * Splits an string into an array of hashtags without '#'.
+ * Splits a string into an array of hashtags without '#'.
  * The string will be split by '#' and ' '.
  *
  * @param  {string} hashtagString input string

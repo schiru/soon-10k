@@ -1,33 +1,16 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var compression = require('compression');
-var exphbs	= require('express-handlebars');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./soon.db');
+const express = require('express');
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const exphbs	= require('express-handlebars');
+const sqlite3 = require('sqlite3').verbose();
+const SQL_STATEMENTS = require('./sqlStatements');
+
+const db = global.db = new sqlite3.Database('./soon.db');
 
 db.serialize(() => {
-	db.run(`CREATE TABLE IF NOT EXISTS 'countdown' (
-		'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-		'title'	TEXT NOT NULL,
-		'description'	TEXT,
-		'startTimestamp'	INTEGER,
-		'endTimestamp'	INTEGER NOT NULL,
-		'createdTimestamp'	INTEGER NOT NULL,
-		'deletePassphrase'	TEXT
-	)`);
-
-	db.run(`CREATE TABLE IF NOT EXISTS 'hashtag' (
-		'id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-		'name' TEXT NOT NULL UNIQUE
-	)`);
-
-	db.run(`CREATE TABLE IF NOT EXISTS 'hashtagAssociation' (
-		'hashtagId'	INTEGER NOT NULL,
-		'countdownId'	INTEGER NOT NULL,
-		PRIMARY KEY('hashtagId','countdownId'),
-		FOREIGN KEY('hashtagId') REFERENCES hashtag(id),
-		FOREIGN KEY('countdownId') REFERENCES countdown(id)
-	)`);
+	SQL_STATEMENTS.init.forEach(statement => {
+		db.run(statement);
+	});
 });
 
 var app = express();
@@ -56,38 +39,21 @@ app.post('/create', function(req, res) {
 	var createHelpers = require('./createHelpers');
 
 	createHelpers.validateInput(req, res, function(isValid, errors) {
-
 		if (isValid) {
+			let values = createHelpers.generateValues(req, res);
+			let hashtagsArray = createHelpers.generateHashtagArray(req.body.twitterHashtags);
 
-			var values = createHelpers.generateValues(req, res);
-
-			var sql = `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
-							VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`;
-
-			var sqlStatement = db.prepare(sql, values, error => {
-				if (error != null) {
-					console.log(error);
-					throw error;
-				}
-			});
-
-			sqlStatement.run(function(error) {
-				if(error != null) {
-					console.log(error);
-					throw error;
-				}
-
-				// TODO: insert hash tags into database
-				var hashtagArray = createHelpers.generateHashtagArray(req.body.twitterHashtags);
-
-				res.redirect('/c/'+this.lastID); // redirect to new created countdown
+			createHelpers.createCountdown(values, hashtagsArray).then(insertedId => {
+				console.log('countdown created');
+				res.redirect(`/c/${id}`);
+			}).catch(error => {
+				console.error('error in createCountdown chain: ', error);
 			});
 
 		} else {
 			console.log(errors);
 			res.render('create', {'body': req.body, 'errors': errors}); // render create page with current values and errors
 		}
-
 	});
 });
 
@@ -126,9 +92,6 @@ app.get('/c/:id', function (req, res) {
 						throw err;
 					}
 				});
-
-
-
 		} else {
 			res.status(400);
 			res.end();
@@ -136,7 +99,7 @@ app.get('/c/:id', function (req, res) {
 });
 
 app.listen(3000, function () {
-	console.log('Example app listening on port 3000!');
+	console.log('Soon is available on port 3000!');
 });
 
 function cleanup() {
