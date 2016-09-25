@@ -49,7 +49,6 @@ app.post('/create', function(req, res) {
 			}).catch(error => {
 				console.error('error in createCountdown chain: ', error);
 			});
-
 		} else {
 			console.log(errors);
 			res.render('create', {'body': req.body, 'errors': errors}); // render create page with current values and errors
@@ -58,44 +57,47 @@ app.post('/create', function(req, res) {
 });
 
 app.get('/c/:id', function (req, res) {
-		let id;
-		if (req.params.id && !isNaN(id = parseInt(req.params.id))) {
-			console.log(`detail view for id ${id} requested...`);
+	let id;
+	try {
+		id = parseInt(req.params.id);
 
-			db.all(`SELECT cd.id, cd.title, cd.description, cd.endTimestamp
-				FROM countdown cd
-				WHERE cd.id = ?`, [id], (err, infos) => {
+		if (isNaN(id))
+			throw new Error('countdown id malformed');
+	} catch(error) {
+		console.error(error);
+		res.status(400);
+		res.end();
+		return;
+	}
 
-					if (!err && infos.length === 1) {
-						let info = infos[0];
-						let hashtags = [];
+	console.log(`detail view for id ${id} requested...`);
+	let selectCountdownStatement = SQL_STATEMENTS.select.countdown;
+	let selectHashtagsStatement = SQL_STATEMENTS.select.hashtagsForCountdown;
 
-						db.each(`SELECT ht.name
-							FROM hashtagAssociation hA
-							JOIN hashtag ht ON hA.hashtagId = ht.id
-							WHERE hA.countdownId = ?`, [id], (err, hashtag) => {
+	db.all(selectCountdownStatement, [id], (error, infos) => {
+		if (error || infos.length !== 1) {
+			throw error;
+		}
 
-								if (!err) {
-									console.log(hashtag);
-									hashtags.push(hashtag.name);
-								} else
-									throw err;
+		let info = infos[0];
+		let hashtags = [];
 
-							}, () => {
-								console.log('import done', info);
-								res.render('detail', {
-									cTitle: info.title,
-									cDescription: info.description
-								});
-							});
-					} else {
-						throw err;
-					}
+		// Fetch associated hashtags
+		db.each(selectHashtagsStatement, [id], (error, hashtag) => {
+			if (error) {
+				throw error;
+			}
+
+			hashtags.push(hashtag.name);
+			}, () => {
+				hashtags = '#' + hashtags.join(' #');
+				res.render('detail', {
+					cTitle: info.title,
+					cDescription: info.description,
+					cHashtags: hashtags
 				});
-		} else {
-			res.status(400);
-			res.end();
-		};
+		});
+	});
 });
 
 app.listen(3000, function () {

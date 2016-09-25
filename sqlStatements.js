@@ -29,6 +29,12 @@ module.exports = {
 
 	},
 	select: {
-
+		countdown: `SELECT cd.id, cd.title, cd.description, cd.endTimestamp
+			FROM countdown cd
+			WHERE cd.id = ?`,
+		hashtagsForCountdown: `SELECT ht.name
+			FROM hashtagAssociation hA
+			JOIN hashtag ht ON hA.hashtagId = ht.id
+			WHERE hA.countdownId = ?`
 	}
 };
