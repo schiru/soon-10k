@@ -9,10 +9,13 @@
 <article id="countdown" class="c">
 	<h2>{{cTitle}}</h2>
 	<div class="bar">
-		<span class="lable" >Soon!</span>
-	  <span class="fill" style="transform: translateX(12.5%); animation: progress 60s linear 1 forwards;"></span>
+		{{#if cPercentage}}
+		<span class="lable">{{cPercentage}}% completed</span>
+	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress 60s linear 1 forwards;"></span>
+		{{/if}}
 	</div>
 	<p>x days, y hours, z minutes and z seconds left</p>
+	<p>Ending at {{cEndDate}}</p>
 	<p>{{cDescription}}</p>
 </article>
 <section id="tweets" class="dark">

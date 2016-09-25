@@ -81,6 +81,20 @@ app.get('/c/:id', function (req, res) {
 
 		let info = infos[0];
 		let hashtags = [];
+		let percentage = null;
+
+		if (info.startTimestamp) {
+			let now = new Date().getTime();
+			let end = info.endTimestamp;
+			let start = info.startTimestamp;
+
+			let totalDiff = end - start;
+			let currentDiff = end - now;
+			if (totalDiff > 0 && currentDiff < totalDiff) {
+				percentage = 100 - (100*(currentDiff/totalDiff));
+				percentage = Math.round(percentage);
+			}
+		}
 
 		// Fetch associated hashtags
 		db.each(selectHashtagsStatement, [id], (error, hashtag) => {
@@ -94,7 +108,10 @@ app.get('/c/:id', function (req, res) {
 				res.render('detail', {
 					cTitle: info.title,
 					cDescription: info.description,
-					cHashtags: hashtags
+					cEndDate: new Date(info.endTimestamp).toISOString(),
+					cHashtags: hashtags,
+					cPercentage: percentage,
+					cPercentageBarValue: percentage/2
 				});
 		});
 	});

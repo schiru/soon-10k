@@ -26,10 +26,9 @@ module.exports = {
 						VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`,
 		createHashtag: `INSERT INTO hashtag ('name') VALUES (?);`,
 		createHashtagAssociation: `INSERT INTO hashtagAssociation (hashtagId, countdownId) VALUES(?, ?)`
-
 	},
 	select: {
-		countdown: `SELECT cd.id, cd.title, cd.description, cd.endTimestamp
+		countdown: `SELECT cd.id, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
 			FROM countdown cd
 			WHERE cd.id = ?`,
 		hashtagsForCountdown: `SELECT ht.name
