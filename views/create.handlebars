@@ -1,15 +1,15 @@
 <section class="c">
 	<h2>Create new Countdown</h2>
 	<form id="cf" method="post" action="/create">
-		<input type="text" placeholder="Title" name="Title of Countdown">
-		<textarea placeholder="Description" name="Description of Countdown"></textarea>
+		<input type="text" placeholder="Title" name="title">
+		<textarea placeholder="Description" name="description"></textarea>
 		<div id="tinp">
-			<input type="number" min="0" name="days left" placeholder="days" value="">
-			<input type="number" min="0" name="hours left" placeholder="hours">
-			<input type="number" min="0" name="minutes left" placeholder="minutes">
-			<input type="number" min="0" name="seconds left" placeholder="seconds">
+			<input type="number" min="0" name="days" placeholder="days" value="">
+			<input type="number" min="0" name="hours" placeholder="hours">
+			<input type="number" min="0" name="minutes" placeholder="minutes">
+			<input type="number" min="0" name="seconds" placeholder="seconds">
 		</div>
-		<input type="text" placeholder="Associated Twitter Hashtag" name="Associated Twitter Hashtag">
+		<input type="text" placeholder="Associated Twitter Hashtag" name="twitter-hashtag">
 		<button type="submit">Create</button>
 		<a href="/">Cancel and go back</a>
 	</form>

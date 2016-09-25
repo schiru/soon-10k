@@ -54,7 +54,41 @@ app.get('/create', function (req, res) {
 
 app.post('/create', function (req, res) {
 		console.log(req.body);
-		res.redirect('/c/1'); // static dummy redirect
+
+		var start = new Date().getTime();
+		var durationSeconds = (parseInt(req.body.seconds))
+												+ (parseInt(req.body.minutes)*60)
+												+ (parseInt(req.body.hours)*60*60)
+												+ (parseInt(req.body.days)*24*60*60);
+		var end = start + durationSeconds*1000;
+
+		var values = {
+			'$title': req.body.title,
+			'$description': req.body.description,
+			'$startTimestamp': start,
+			'$endTimestamp': end,
+			'$createdTimestamp': start,
+			'$deletePassphrase': 'DELETE'
+		}
+
+		console.log(values);
+
+		var sql = `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
+						VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`;
+
+		var sqlStatement = db.prepare(sql, values, error => {
+			if (error != null) {
+				throw error;
+			}
+		});
+
+		sqlStatement.run(function(error) {
+			if(error != null) {
+				throw error;
+			}
+
+			res.redirect('/c/'+this.lastID); // redirect to new created countdown
+		});
 });
 
 app.get('/c/:id', function (req, res) {
