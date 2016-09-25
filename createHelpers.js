@@ -45,7 +45,6 @@ function executeInsertStatement(statement, values) {
 				throw error;
 			}
 
-			debugger;
 			console.log('running prepared statement');
 			preparedStatement.run(function(error) {
 				if (error != null) {
