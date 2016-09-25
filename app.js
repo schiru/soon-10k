@@ -43,9 +43,9 @@ app.post('/create', function(req, res) {
 			let values = createHelpers.generateValues(req, res);
 			let hashtagsArray = createHelpers.generateHashtagArray(req.body.twitterHashtags);
 
-			createHelpers.createCountdown(values, hashtagsArray).then(insertedId => {
+			createHelpers.createCountdown(values, hashtagsArray).then(countdownId => {
 				console.log('countdown created');
-				res.redirect(`/c/${id}`);
+				res.redirect(`/c/${countdownId}`);
 			}).catch(error => {
 				console.error('error in createCountdown chain: ', error);
 			});

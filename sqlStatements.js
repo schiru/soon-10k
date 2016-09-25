@@ -25,7 +25,7 @@ module.exports = {
 		createCountdown: `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
 						VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`,
 		createHashtag: `INSERT INTO hashtag ('name') VALUES (?);`,
-		createHashtagAssociation: ``
+		createHashtagAssociation: `INSERT INTO hashtagAssociation (hashtagId, countdownId) VALUES(?, ?)`
 
 	},
 	select: {

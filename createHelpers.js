@@ -4,34 +4,35 @@ const db = global.db;
 
 module.exports.createCountdown = function(values, hashtagsArray) {
 	let statement = SQL_STATEMENTS.insert.createCountdown;
-	let promise = new Promise((resolve, reject) => {
 
-		executeInsertStatement(statement, values).then(createdCountdownId => {
-			console.log('countdown created, id: ' + createdCountdownId);
-			hashtagsArray.forEach(hashtag => {
-				createHashtag(hashtag).then(createdHashtagId => {
-					return associateHashtagAndCountdown(createdHashtagId, createdCountdownId);
-				});
-			})
+	return executeInsertStatement(statement, values).then(createdCountdownId => {
+		console.log('countdown created, id: ' + createdCountdownId);
+		let promises = [];
+		hashtagsArray.forEach(hashtag => {
+			promises.push(createHashtag(hashtag).then(createdHashtagId => {
+				return associateHashtagAndCountdown(createdHashtagId, createdCountdownId);
+			}));
 		});
-	});
 
-	return promise;
+		return Promise.all(promises).then(() => {
+			return createdCountdownId;
+		})
+	});
 }
 
 function createHashtag(title) {
+	console.log('creating hashtag..')
 	let statement = SQL_STATEMENTS.insert.createHashtag;
-	let promise = new Promise((resolve, reject) => {
-		console.log('creating Hashtag');
-		resolve();
-	})
-
-	return promise;
+ 	return executeInsertStatement(statement, [title]).catch(error => {
+		// TODO: if error, check if hashtag does already exist
+		// if so, fetch id and return it
+	});
 };
 
 function associateHashtagAndCountdown(hashtagId, countdownId) {
-	console.log('assigning hashtag and countdown');
-	return null;
+	let statement = SQL_STATEMENTS.insert.createHashtagAssociation;
+	let values = [hashtagId, countdownId];
+ 	return executeInsertStatement(statement, values);
 }
 
 function executeInsertStatement(statement, values) {
