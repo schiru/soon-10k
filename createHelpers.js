@@ -60,53 +60,104 @@ function executeInsertStatement(statement, values) {
 	return promise;
 }
 
+/**
+ * Examines if a input value or any input value in a given array is not empty.
+ * Pushes the errorMessage if necessary to the errorsArray and returns isValid flag.
+ *
+ * @param  {String | String[]} values
+ * @param  {String} errorMessage
+ * @param  {Boolean} isValid
+ * @param  {String[]} errorsArray
+ * @return {Boolean}
+ */
+function validationValueRequired(values, errorMessage, isValid, errorsArray) {
+	if (Array.isArray(values)) {
+		// determine if one of the n values was given
+		let oneInN = false;
+		for (let val of values) {
+			if (val != '' && val != null) {
+				oneInN = true;
+			}
+		}
+		if (!oneInN) {
+			isValid = validationError(errorMessage, errorsArray);
+		}
+
+	} else if (values == '' || values == null) {
+		isValid = validationError(errorMessage, errorsArray);
+	}
+
+	return isValid;
+}
+
+/**
+ * Pushes a errorMessage to the errorsArray and returns false.
+ *
+ * @param  {String} errorMessage
+ * @param  {String[]} errorsArray
+ * @return {boolean}              allways false
+ */
+function validationError(errorMessage, errorsArray) {
+	errorsArray.push(errorMessage);
+	return false;
+}
+
+/**
+ * Validates the create input from the client form.
+ * Calls the given vallback with the isValid flag and the errorsArray.
+ *
+ * @param  {Request}  req
+ * @param  {Response} res
+ * @param  {Function} callback
+ * @return {void}
+ */
 module.exports.validateInput = function (req, res, callback) {
 	var values = req.body;
 	var errors = [];
 	var isValid = true;
 
 	// validate title
-	if (values.title == '') {
-		isValid = false;
-		errors.push('A title is reqired.');
-	}
+	isValid = validationValueRequired(values.title, 'A title is required.', isValid, errors);
 
 	// validate time input
 	if (values.cdType == 'abs') {
 
-		if (values.abs_date == '') {
-			isValid = false;
-			errors.push('A date is reqired.');
-		} else {
+		inspectValid = validationValueRequired(values.abs_date, 'A date is required.', isValid, errors);
+		isValid = validationValueRequired(values.abs_date, 'A timezone is required.', isValid, errors);
+
+		if (isValid) { // date was entered
 			var date = generateAbsDateObject(values.abs_date, values.abs_time, values.abs_offset);
-			if (isNaN(date.valueOf())) {
-				isValid = false;
-				errors.push('The entered date is invalid.');
+			if (isNaN(date.valueOf())) { // check if entered date was valid
+				isValid = validationError('The date is invalid.', errors);
 			}
 		}
 
 	} else if (values.cdType == 'rel') {
 
-		if (values.days == '' && values.hours == '' && values.minutes == '' && values.seconds == '') {
-			isValid = false;
-			errors.push('A duration is reqired.');
-		} else {
+		isValid = validationValueRequired([values.days, values.hours, values.minutes, values.seconds], 'A duration is required.', isValid, errors);
+
+		if (isValid) { // date was entered
 			var date = generateRelDateObject(values.days, values.hours, values.minutes, values.seconds);
-			if (isNaN(date.valueOf())) {
-				isValid = false;
-				errors.push('The duration is invalid.');
+			if (isNaN(date.valueOf())) { // check if entered duration was valid
+				isValid = validationError('The duration is invalid.', errors);
 			}
 		}
 
 	} else {
-		isValid = false;
-		errors.push('No valid input!');
+		isValid = validationError('No valid date or duration input!', errors);
 	}
 
 	callback(isValid, errors);
-
 };
 
+/**
+ * Generates the target date opject from the client form values for the date input.
+ *
+ * @param  {String} dateString           YYYY-MM-DD string is expected
+ * @param  {String} timeString           HH:MM:SS string is expected
+ * @param  {String} timezoneOffsetString number as string (e.g. 2 or -2) is expected
+ * @return {Date}
+ */
 var generateAbsDateObject = function (dateString, timeString, timezoneOffsetString) {
 	var dateTimeString = dateString;
 	if (timeString != '') {
@@ -119,17 +170,38 @@ var generateAbsDateObject = function (dateString, timeString, timezoneOffsetStri
 	return new Date(targetDateTimestamp);
 }
 
-var generateRelDateObject = function (daysString, hoursString, minutesString, secondsString, timezoneOffset) {
-	var durationSeconds = (parseInt(secondsString))
-											+ (parseInt(minutesString)*60)
-											+ (parseInt(hoursString)*60*60)
-											+ (parseInt(daysString)*24*60*60);
+/**
+ * Generates the target date opject from the client form values for the duration input.
+ * A negative duration will result in an invalid date.
+ *
+ * @param  {String} daysString     number as string is expected
+ * @param  {String} hoursString    number as string is expected
+ * @param  {String} minutesString  number as string is expected
+ * @param  {String} secondsString  number as string is expected
+ * @return {Date}
+ */
+var generateRelDateObject = function (daysString, hoursString, minutesString, secondsString) {
+	var durationSeconds = (parseInt(secondsString) | 0)
+											+ (parseInt(minutesString)*60 | 0)
+											+ (parseInt(hoursString)*60*60 | 0)
+											+ (parseInt(daysString)*24*60*60 | 0);
 
+	if (durationSeconds <= 0) {
+		return new Date(NaN); // produce invalid date
+	}
 	var duration = durationSeconds*1000;
 	var now = new Date().getTime();
+
 	return new Date(now+duration);
 }
 
+/**
+ * Prepares the values from the input form for the database insert.
+ *
+ * @param  {Request} req
+ * @param  {Response} res
+ * @return {Object}
+ */
 module.exports.generateValues = function (req, res) {
 
 	var endDate;
@@ -158,8 +230,8 @@ module.exports.generateValues = function (req, res) {
  * Splits a string into an array of hashtags without '#'.
  * The string will be split by '#' and ' '.
  *
- * @param  {string} hashtagString input string
- * @return {array}
+ * @param  {String} hashtagString input string
+ * @return {Array}
  */
 module.exports.generateHashtagArray = function(hashtagString) {
 	var splitByHash = hashtagString.split('#');

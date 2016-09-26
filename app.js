@@ -50,7 +50,6 @@ app.post('/create', function(req, res) {
 				console.error('error in createCountdown chain: ', error);
 			});
 		} else {
-			console.log(errors);
 			res.render('create', {'body': req.body, 'errors': errors}); // render create page with current values and errors
 		}
 	});
