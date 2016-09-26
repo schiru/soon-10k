@@ -122,8 +122,9 @@ var generateRelDateObject = function (daysString, hoursString, minutesString, se
 											+ (parseInt(hoursString)*60*60)
 											+ (parseInt(daysString)*24*60*60);
 
-	var timestamp = durationSeconds*1000;
-	return new Date(timestamp);
+	var duration = durationSeconds*1000;
+	var now = new Date().getTime();
+	return new Date(now+duration);
 }
 
 module.exports.generateValues = function (req, res) {
