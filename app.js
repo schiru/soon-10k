@@ -98,6 +98,7 @@ app.get('/c/:id', function (req, res) {
 			if (totalDiff > 0 && currentDiff < totalDiff) {
 				percentage = 100 - (100*(currentDiff/totalDiff));
 				percentage = Math.round(percentage);
+				percentage = percentage > 100 ? 100 : percentage;
 			}
 		}
 
