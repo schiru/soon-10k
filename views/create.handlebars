@@ -28,11 +28,11 @@
 				<input type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
 			</label>
 
-			<input id="abs" type="radio" name="cdType" value="abs" {{#if cdIsAbs}}checked{{/if}}>
+			<input id="abs" type="radio" name="cdType" value="abs" {{#unless cdIsRel}}checked{{/unless}}>
 			<label for="abs" class="tab">
 				Target date
 			</label>
-			<input id="rel" type="radio" name="cdType" value="rel" {{#unless cdIsAbs}}checked{{/unless}}>
+			<input id="rel" type="radio" name="cdType" value="rel" {{#if cdIsRel}}checked{{/if}}>
 			<label for="rel" class="tab">
 				Relative time from now
 			</label>
