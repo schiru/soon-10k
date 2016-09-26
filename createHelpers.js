@@ -1,3 +1,7 @@
+'use strict';
+
+const passwordHash = require('password-hash');
+
 const SQL_STATEMENTS = require('./sqlStatements');
 const sqlite3 = require('sqlite3').verbose();
 const db = global.db;
@@ -62,15 +66,15 @@ function executeInsertStatement(statement, values) {
 
 /**
  * Examines if a input value or any input value in a given array is not empty.
- * Pushes the errorMessage if necessary to the errorsArray and returns isValid flag.
+ * Pushes the errorMessage if necessary to the errorsArray and returns the resulting boolen value.
  *
  * @param  {String | String[]} values
  * @param  {String} errorMessage
- * @param  {Boolean} isValid
  * @param  {String[]} errorsArray
  * @return {Boolean}
  */
-function validationValueRequired(values, errorMessage, isValid, errorsArray) {
+function validationValueRequired(values, errorMessage, errorsArray) {
+	let isValid = true;
 	if (Array.isArray(values)) {
 		// determine if one of the n values was given
 		let oneInN = false;
@@ -117,36 +121,47 @@ module.exports.validateInput = function (req, res, callback) {
 	var isValid = true;
 
 	// validate title
-	isValid = validationValueRequired(values.title, 'A title is required.', isValid, errors);
+	let titleValid = true;
+	titleValid = validationValueRequired(values.title, 'A title is required.', errors);
 
 	// validate time input
+	let dateValid = true;
 	if (values.cdType == 'abs') {
 
-		inspectValid = validationValueRequired(values.abs_date, 'A date is required.', isValid, errors);
-		isValid = validationValueRequired(values.abs_offset, 'A timezone is required.', isValid, errors);
+		dateValid = validationValueRequired(values.abs_date, 'A date is required.', errors)
+								&& validationValueRequired(values.abs_offset, 'A timezone is required.', errors);
 
-		if (isValid) { // date was entered
+		if (dateValid) { // date was entered
 			var date = generateAbsDateObject(values.abs_date, values.abs_time, values.abs_offset);
 			if (isNaN(date.valueOf())) { // check if entered date was valid
-				isValid = validationError('The date is invalid.', errors);
+				dateValid = validationError('The date is invalid.', errors);
 			}
 		}
 
 	} else if (values.cdType == 'rel') {
 
-		isValid = validationValueRequired([values.days, values.hours, values.minutes, values.seconds], 'A duration is required.', isValid, errors);
+		dateValid = validationValueRequired([values.days, values.hours, values.minutes, values.seconds], 'A duration is required.', errors);
 
-		if (isValid) { // date was entered
+		if (dateValid) { // date was entered
 			var date = generateRelDateObject(values.days, values.hours, values.minutes, values.seconds);
 			if (isNaN(date.valueOf())) { // check if entered duration was valid
-				isValid = validationError('The duration is invalid.', errors);
+				dateValid = validationError('The duration is invalid.', errors);
 			}
 		}
 
 	} else {
-		isValid = validationError('No valid date or duration input!', errors);
+		dateValid = validationError('No valid date or duration input!', errors);
 	}
 
+	// validate passphrase
+	let passValid = true;
+	let minPassLen = 4;
+	passValid = validationValueRequired(values.delpass, 'A delete passphrase is required.', errors);
+	if(passValid && values.delpass.length < minPassLen) {
+		passValid = validationError(`Passphrase must be at least ${minPassLen} characters.`, errors);
+	}
+
+	isValid = titleValid && dateValid && passValid;
 	callback(isValid, errors);
 };
 
@@ -211,7 +226,9 @@ module.exports.generateValues = function (req, res) {
 		endDate = generateRelDateObject(req.body.days, req.body.hours, req.body.minutes, req.body.seconds);
 	}
 
-	var start = created = new Date().getTime();
+	// TODO: use created timestamp from client if available (for better accuracy)
+	var start, created;
+	start = created = new Date().getTime();
 	var end = endDate.getTime();
 
 	var values = {
@@ -220,7 +237,7 @@ module.exports.generateValues = function (req, res) {
 		'$startTimestamp': start,
 		'$endTimestamp': end,
 		'$createdTimestamp': created,
-		'$deletePassphrase': 'DELETE'
+		'$deletePassphrase': passwordHash.generate(req.body.delpass)
 	}
 
 	return values;

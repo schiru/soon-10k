@@ -21,6 +21,7 @@
     "compression": "^1.6.2",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
+    "password-hash": "^1.2.2",
     "sqlite3": "^3.1.4"
   }
 }
