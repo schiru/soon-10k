@@ -123,7 +123,7 @@ module.exports.validateInput = function (req, res, callback) {
 	if (values.cdType == 'abs') {
 
 		inspectValid = validationValueRequired(values.abs_date, 'A date is required.', isValid, errors);
-		isValid = validationValueRequired(values.abs_date, 'A timezone is required.', isValid, errors);
+		isValid = validationValueRequired(values.abs_offset, 'A timezone is required.', isValid, errors);
 
 		if (isValid) { // date was entered
 			var date = generateAbsDateObject(values.abs_date, values.abs_time, values.abs_offset);
