@@ -24,11 +24,12 @@
 
   .tab {
     flex-basis: 50%;
+    flex-grow: 1;
     width: 100%;
     border-bottom: 5px solid $main-color-dark;
     background-color: $dark-grey;
     color: $main-font-color-light;
-    padding: 10px 30px;
+    padding: 15px 30px 10px 30px;
     cursor: pointer;
     z-index: 2;
     transition: all .5s;
