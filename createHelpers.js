@@ -41,6 +41,7 @@ function associateHashtagAndCountdown(hashtagId, countdownId) {
 
 function executeInsertStatement(statement, values) {
 	console.log('executing sql statement');
+	debugger;
 	let promise = new Promise((resolve, reject) => {
 		let preparedStatement = db.prepare(statement);
 		preparedStatement.bind(values, error => {

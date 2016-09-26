@@ -82,6 +82,16 @@ nav.nav { // traditional nav bar
   flex-grow: 1;
 }
 
+.t { // tweets container
+	flex-wrap: wrap;
+
+	li {
+		flex-basis: 33%;
+		flex-shrink: 1;
+		flex-grow: 1;
+	}
+}
+
 .col3 {
   display: flex;
   flex-direction: column;
