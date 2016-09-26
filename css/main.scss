@@ -17,7 +17,7 @@ ul {
   padding: 0;
 }
 
-input, button, a.butt, textarea {
+input, button, a.butt, label.butt, textarea {
   height: 40px;
   font-family: sans-serif;
   box-sizing: border-box;
@@ -29,10 +29,15 @@ input, button, a.butt, textarea {
   border: 1px solid $main-color-dark;
 }
 
-button, a.butt {
+button, a.butt, label.butt {
   color: $main-font-color-light;
   text-decoration: none;
   background-color: $main-color-default;
+  cursor: pointer;
+  transition: all .5s;
+  &:hover {
+    background-color: $main-color-dark;
+  }
 }
 
 body {

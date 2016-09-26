@@ -1,55 +1,55 @@
 <section class="c">
 
 	{{#if errors}}
-		<ul>
+		<ul class="error">
 		{{#each errors}}
 			<li>{{this}}</li>
 		{{/each}}
-		<ul>
+		</ul>
 	{{/if}}
 
 	<h2>Create new Countdown</h2>
+
 	<form id="cf" method="post" action="/create">
-		<label>
-			Title
-			<input type="text" placeholder="Title" name="title" value="{{body.title}}">
-		</label>
 
-		<label>
-			Description
-			<textarea placeholder="Description" name="description">{{body.description}}</textarea>
-		</label>
+		<div>
+			<label class="bg">
+				Title
+				<input type="text" placeholder="Title" name="title" value="{{body.title}}">
+			</label>
 
-		<div id=cd_type"">
-			<label>
-				Target date:
-				<input type="radio" name="cdType" value="abs" checked>
+			<label class="bg">
+				Description
+				<textarea placeholder="Description" name="description">{{body.description}}</textarea>
 			</label>
-			<label>
-				Relative time from now:
-				<input type="radio" name="cdType" value="rel">
-			</labe>
-		</div>
 
-		<div id="abs_inp">
-			<h3>Target date</h3>
-			<label>
-				Date (YYYY-MM-DD):
-				<input type="text" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
+			<input id="abs" type="radio" name="cdType" value="abs" checked>
+			<label for="abs" class="tab">
+				Target date
 			</label>
-			<label>
-				Time (HH:MM:SS):
-				<input type="text" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
+			<input id="rel" type="radio" name="cdType" value="rel">
+			<label for="rel" class="tab">
+				Relative time from now
 			</label>
-			<label>
-				Target UTC/GMT timezone:
-				<input type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
-			</label>
-		</div>
 
-		<div id="rel_inp">
-			<h3>Relative time</h3>
-			<div id="tinp">
+			<div id="abs_inp" class="bg">
+				<h3>Target date</h3>
+				<label>
+					Date (YYYY-MM-DD):
+					<input type="text" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
+				</label>
+				<label>
+					Time (HH:MM:SS):
+					<input type="text" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
+				</label>
+				<label>
+					Target UTC/GMT timezone:
+					<input type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
+				</label>
+			</div>
+
+			<div id="rel_inp" class="bg">
+				<h3>Relative time</h3>
 				<label>
 					Days:
 					<input type="number" min="0" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{/if}}">
@@ -67,13 +67,15 @@
 					<input type="number" min="0" name="seconds" placeholder="seconds" value="{{#if body}}{{body.seconds}}{{/if}}">
 				</label>
 			</div>
+
+			<label class="bg">
+				Associated Twitter Hashtag
+				<input type="text" placeholder="Associated Twitter Hashtag" name="twitterHashtags" value="{{body.twitterHashtags}}">
+			</label>
 		</div>
 
-		<label>
-			Associated Twitter Hashtag
-			<input type="text" placeholder="Associated Twitter Hashtag" name="twitterHashtags" value="{{body.twitterHashtags}}">
-		</label>
 		<button type="submit">Create</button>
 		<a href="/">Cancel and go back</a>
+
 	</form>
 </section>
