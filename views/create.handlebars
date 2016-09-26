@@ -41,6 +41,10 @@
 				Time (HH:MM:SS):
 				<input type="text" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
 			</label>
+			<label>
+				Target UTC/GMT timezone:
+				<input type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
+			</label>
 		</div>
 
 		<div id="rel_inp">

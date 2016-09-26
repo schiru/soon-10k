@@ -78,7 +78,7 @@ module.exports.validateInput = function (req, res, callback) {
 			isValid = false;
 			errors.push('A date is reqired.');
 		} else {
-			var date = generateAbsDateObject(values.abs_date, values.abs_time);
+			var date = generateAbsDateObject(values.abs_date, values.abs_time, values.abs_offset);
 			if (isNaN(date.valueOf())) {
 				isValid = false;
 				errors.push('The entered date is invalid.');
@@ -107,16 +107,19 @@ module.exports.validateInput = function (req, res, callback) {
 
 };
 
-var generateAbsDateObject = function (dateString, timeString) {
+var generateAbsDateObject = function (dateString, timeString, timezoneOffsetString) {
 	var dateTimeString = dateString;
 	if (timeString != '') {
 		dateTimeString += 'T'+timeString;
 	}
 
-	return new Date(dateTimeString);
+	var timezoneOffset = parseInt(timezoneOffsetString)*60*60*1000;
+	var targetDateTimestamp = new Date(dateTimeString).getTime() - timezoneOffset;
+
+	return new Date(targetDateTimestamp);
 }
 
-var generateRelDateObject = function (daysString, hoursString, minutesString, secondsString) {
+var generateRelDateObject = function (daysString, hoursString, minutesString, secondsString, timezoneOffset) {
 	var durationSeconds = (parseInt(secondsString))
 											+ (parseInt(minutesString)*60)
 											+ (parseInt(hoursString)*60*60)
@@ -131,7 +134,7 @@ module.exports.generateValues = function (req, res) {
 
 	var endDate;
 	if (req.body.cdType == 'abs') {
-		endDate = generateAbsDateObject(req.body.abs_date, req.body.abs_time);
+		endDate = generateAbsDateObject(req.body.abs_date, req.body.abs_time, req.body.abs_offset);
 	} else if (req.body.cdType == 'rel') {
 		endDate = generateRelDateObject(req.body.days, req.body.hours, req.body.minutes, req.body.seconds);
 	}
