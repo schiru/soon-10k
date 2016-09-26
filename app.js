@@ -4,6 +4,8 @@ const compression = require('compression');
 const exphbs	= require('express-handlebars');
 const sqlite3 = require('sqlite3').verbose();
 const SQL_STATEMENTS = require('./sqlStatements');
+const createHelpers = require('./createHelpers');
+const twitterHelpers = require('./twitterHelpers');
 
 const db = global.db = new sqlite3.Database('./soon.db');
 
@@ -36,8 +38,6 @@ app.get('/create', function (req, res) {
 });
 
 app.post('/create', function(req, res) {
-	var createHelpers = require('./createHelpers');
-
 	createHelpers.validateInput(req, res, function(isValid, errors) {
 		if (isValid) {
 			let values = createHelpers.generateValues(req, res);
@@ -50,8 +50,8 @@ app.post('/create', function(req, res) {
 				console.error('error in createCountdown chain: ', error);
 			});
 		} else {
-			let cdIsAbs = (req.body.cdType == 'abs') ? true : false;
-			res.render('create', {'body': req.body, 'cdIsAbs': cdIsAbs, 'errors': errors}); // render create page with current values and errors
+			console.log(errors);
+			res.render('create', {'body': req.body, 'errors': errors}); // render create page with current values and errors
 		}
 	});
 });
@@ -76,13 +76,18 @@ app.get('/c/:id', function (req, res) {
 
 	db.all(selectCountdownStatement, [id], (error, infos) => {
 		if (error || infos.length !== 1) {
-			throw error;
+			console.log(`could not fetch id ${id}`);
+			res.status(404);
+			// TODO: Implement 404 page
+			res.end('Countdown not found');
+			return;
 		}
 
 		let info = infos[0];
-		let hashtags = [];
+		let hashtagsArray = [];
 		let percentage = null;
 
+		// calculate current downlaod progress percentage
 		if (info.startTimestamp) {
 			let now = new Date().getTime();
 			let end = info.endTimestamp;
@@ -91,7 +96,6 @@ app.get('/c/:id', function (req, res) {
 			let totalDiff = end - start;
 			let currentDiff = end - now;
 			if (totalDiff > 0 && currentDiff < totalDiff) {
-				debugger;
 				percentage = 100 - (100*(currentDiff/totalDiff));
 				percentage = Math.round(percentage);
 			}
@@ -103,18 +107,38 @@ app.get('/c/:id', function (req, res) {
 				throw error;
 			}
 
-			hashtags.push(hashtag.name);
+			hashtagsArray.push(`#${hashtag.name}`);
 			}, () => {
-				hashtags = '#' + hashtags.join(' #');
-				res.render('detail', {
-					cTitle: info.title,
-					cDescription: info.description,
-					cEndDate: new Date(info.endTimestamp).toISOString(),
-					cHashtags: hashtags,
-					cPercentage: percentage,
-					cPercentageBarValue: percentage/2,
-					percentageVisible: percentage != null
-				});
+				let render = (tweets) => {
+					console.log('rendering details view');
+					debugger;
+					let hashtagsString = hashtagsArray.join(' ');
+					let tweetsVisible = tweets && tweets.length > 0;
+
+					res.render('detail', {
+						cTitle: info.title,
+						cDescription: info.description,
+						cEndDate: new Date(info.endTimestamp).toISOString(),
+						cHashtags: hashtagsString,
+						cPercentage: percentage,
+						cPercentageBarValue: percentage/2,
+						percentageVisible: percentage != null,
+						tweetsVisible: tweetsVisible,
+						tweets: tweets
+					});
+				}
+
+				if (hashtagsArray.length > 0) {
+					twitterHelpers.getTweetsForHashtags(hashtagsArray)
+						.catch((error) => {
+							console.error(error);
+						}).then((tweets) => {
+							debugger;
+							return render(tweets.statuses);
+						});
+				} else {
+					render();
+				}
 		});
 	});
 });

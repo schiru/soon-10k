@@ -18,29 +18,19 @@
 	<p>Ending at {{cEndDate}}</p>
 	<p>{{cDescription}}</p>
 </article>
+{{#if tweetsVisible}}
 <section id="tweets" class="dark">
 	<h2>{{cHashtags}}</h2>
-	<ul class="c col3">
+	<ul class="col3 c t">
+		{{#each tweets}}
 		<li>
 			<article class="card">
-				<h3>User</h3>
-				<time>5 minutes ago</time>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+				<h3>{{user.name}} (@{{user.screen_name}})</h3>
+				<time>{{created_at}}</time>
+				<p>{{text}}</p>
 			</article>
 		</li>
-		<li>
-			<article class="card">
-				<h3>User</h3>
-				<time>5 minutes ago</time>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-			</article>
-		</li>
-		<li>
-			<article class="card">
-				<h3>User</h3>
-				<time>5 minutes ago</time>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-			</article>
-		</li>
+		{{/each}}
 	</ul>
 </section>
+{{/if}}
