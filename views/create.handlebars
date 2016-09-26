@@ -23,11 +23,11 @@
 				<textarea placeholder="Description" name="description">{{body.description}}</textarea>
 			</label>
 
-			<input id="abs" type="radio" name="cdType" value="abs" checked>
+			<input id="abs" type="radio" name="cdType" value="abs" {{#if cdIsAbs}}checked{{/if}}>
 			<label for="abs" class="tab">
 				Target date
 			</label>
-			<input id="rel" type="radio" name="cdType" value="rel">
+			<input id="rel" type="radio" name="cdType" value="rel" {{#unless cdIsAbs}}checked{{/unless}}>
 			<label for="rel" class="tab">
 				Relative time from now
 			</label>
