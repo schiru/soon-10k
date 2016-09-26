@@ -23,6 +23,11 @@
 				<textarea placeholder="Description" name="description">{{body.description}}</textarea>
 			</label>
 
+			<label class="bg">
+				Associated Twitter Hashtags
+				<input type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
+			</label>
+
 			<input id="abs" type="radio" name="cdType" value="abs" {{#if cdIsAbs}}checked{{/if}}>
 			<label for="abs" class="tab">
 				Target date
@@ -51,26 +56,26 @@
 			<div id="rel_inp" class="bg">
 				<h3>Relative time</h3>
 				<label>
-					Days:
+					Days
 					<input type="number" min="0" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{/if}}">
 				</label>
 				<label>
-					Hours:
+					Hours
 					<input type="number" min="0" name="hours" placeholder="hours" value="{{#if body}}{{body.hours}}{{/if}}">
 				</label>
 				<label>
-					Minutes:
+					Minutes
 					<input type="number" min="0" name="minutes" placeholder="minutes" value="{{#if body}}{{body.minutes}}{{/if}}">
 				</label>
 				<label>
-					Seconds:
+					Seconds
 					<input type="number" min="0" name="seconds" placeholder="seconds" value="{{#if body}}{{body.seconds}}{{/if}}">
 				</label>
 			</div>
 
 			<label class="bg">
-				Associated Twitter Hashtag
-				<input type="text" placeholder="Associated Twitter Hashtag" name="twitterHashtags" value="{{body.twitterHashtags}}">
+				Delete Passphrase (needed to delete the countdown)
+				<input type="text" placeholder="Your passphrase" name="delpass">
 			</label>
 		</div>
 
