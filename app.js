@@ -1,13 +1,13 @@
 const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const db = global.db = new sqlite3.Database('./soon.db');
+
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const exphbs	= require('express-handlebars');
-const sqlite3 = require('sqlite3').verbose();
 const SQL_STATEMENTS = require('./sqlStatements');
 const createHelpers = require('./createHelpers');
 const twitterHelpers = require('./twitterHelpers');
-
-const db = global.db = new sqlite3.Database('./soon.db');
 
 db.serialize(() => {
 	SQL_STATEMENTS.init.forEach(statement => {
@@ -83,13 +83,17 @@ app.get('/c/:id', function (req, res) {
 			return;
 		}
 
+		let now = new Date().getTime();
 		let info = infos[0];
 		let hashtagsArray = [];
 		let percentage = null;
 
+		let remainingSeconds = (info.endTimestamp - now) / 1000;
+		remainingSeconds = Math.ceil(remainingSeconds);
+		remainingSeconds = remainingSeconds < 0 ? 0 : remainingSeconds;
+
 		// calculate current downlaod progress percentage
 		if (info.startTimestamp) {
-			let now = new Date().getTime();
 			let end = info.endTimestamp;
 			let start = info.startTimestamp;
 
@@ -124,6 +128,7 @@ app.get('/c/:id', function (req, res) {
 						cPercentage: percentage,
 						cPercentageBarValue: percentage/2,
 						percentageVisible: percentage != null,
+						remainingSeconds: remainingSeconds,
 						tweetsVisible: tweetsVisible,
 						tweets: tweets
 					});
