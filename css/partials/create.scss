@@ -33,6 +33,8 @@
     cursor: pointer;
     z-index: 2;
     transition: all .5s;
+    -webkit-user-select: none;
+    user-select: none;
     &:hover {
       background-color: $main-color-dark !important;
     }
@@ -92,7 +94,8 @@ input[type=radio] {
   padding-top: 0;
   padding-bottom: 0;
   overflow: hidden;
-  transition: max-height 1s 1s;
+  transition: all .7s .7s;
+  transition-timing-function: ease-in-out;
   border-bottom: 0;
   border-top: 0;
   position: relative;
@@ -121,10 +124,9 @@ input[type=radio] {
   ~ #rel_inp {
     max-height: 0;
     overflow: hidden;
-    transition: all 1s;
+    transition: all .7s;
   }
 }
-
 
 #rel:checked {
   ~ label[for="rel"] {
@@ -133,7 +135,7 @@ input[type=radio] {
   ~ #abs_inp {
     max-height: 0;
     overflow: hidden;
-    transition: all 1s;
+    transition: all .7s;
   }
 }
 
