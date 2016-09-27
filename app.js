@@ -186,7 +186,11 @@ if (cluster.isMaster) {
 							remainingSeconds: remainingSeconds,
 							tweetsVisible: tweetsVisible,
 							tweets: tweets,
-							isRelativeCountdown: isRelativeCountdown
+							isRelativeCountdown: isRelativeCountdown,
+							metaRefresh: {
+								delay: 30, //in seconds
+								url: `/c/${info.uuid}`
+							}
 						});
 					}
 
