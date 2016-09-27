@@ -1,15 +1,11 @@
-#cf > div { // create form
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-  border-radius: 3px;
-  overflow: hidden;
+#cf {
+
   max-width: 100%;
-  width: 500px;
+  width: 768px;
   margin: 0 auto;
-  display:flex;
-  flex-flow: row wrap;
   margin-bottom: 20px;
 
-  input, textarea {
+  input, button, textarea {
     width: 100%;
   }
 
@@ -18,28 +14,36 @@
     resize: vertical;
   }
 
-  * {
-    flex-basis: 100%;
-  }
+  > div { // create form
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+    overflow: hidden;
+    display:flex;
+    flex-flow: row wrap;
+    margin-bottom: 20px;
 
-  .tab {
-    flex-basis: 50%;
-    flex-grow: 1;
-    width: 100%;
-    border-bottom: 5px solid $main-color-dark;
-    background-color: $dark-grey;
-    color: $main-font-color-light;
-    padding: 15px 30px 10px 30px;
-    cursor: pointer;
-    z-index: 2;
-    transition: all .5s;
-    -webkit-user-select: none;
-    user-select: none;
-    &:hover {
-      background-color: $main-color-dark !important;
+    * {
+      flex-basis: 100%;
+    }
+
+    .tab {
+      flex-basis: 50%;
+      flex-grow: 1;
+      width: 100%;
+      border-bottom: 5px solid $main-color-dark;
+      background-color: $dark-grey;
+      color: $main-font-color-light;
+      padding: 15px 30px 10px 30px;
+      cursor: pointer;
+      z-index: 2;
+      transition: all .5s;
+      -webkit-user-select: none;
+      user-select: none;
+      &:hover {
+        background-color: $main-color-dark !important;
+      }
     }
   }
-
 }
 
 .bg {
@@ -50,6 +54,7 @@
   border: 1px solid darken($light-grey, 30%);
   border-bottom: 0;
   z-index: 1;
+  color: $main-font-color-dark;
   .bg {
     padding: 0;
   }

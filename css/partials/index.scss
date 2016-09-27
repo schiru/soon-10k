@@ -1,8 +1,14 @@
 #cta { // call to action in index.html
   overflow: hidden;
-  padding: 100px 20px;
+  padding: 50px 20px;
+  img {
+    max-width: 500px;
+    width: 100%;
+  }
   h2 {
+    transform: rotateZ(-5deg);
     margin-bottom: 50px;
+    margin-top: 0px;
     font-size: 42px;
   }
   ul {
@@ -24,6 +30,7 @@
 }
 
 .ex { // example (popular, recent, ending soon)
+  padding-top: 50px;
   a {
     text-decoration: none;
     color: white;
