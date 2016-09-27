@@ -1,4 +1,5 @@
 const Twitter = require('twitter');
+const moment = require('moment');
 const KEYS = require('./keys');
 
 const twitterClient = new Twitter({
@@ -22,5 +23,14 @@ module.exports.getTweetsForHashtags = function(hashtagsArray) {
 			 resolve(tweets, response);
 		});
 	})
+}
 
+module.exports.patchStatuses = function(twitterStatuses) {
+	if (!(twitterStatuses instanceof Array) || twitterStatuses.length == 0) {
+		return [];
+	}
+
+	twitterStatuses.forEach(status => {
+		status.created_at_relative = moment(status.created_at).fromNow();
+	});
 }

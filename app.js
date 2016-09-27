@@ -7,6 +7,9 @@ const db = global.db = new sqlite3.Database('./soon.db');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const exphbs	= require('express-handlebars');
+const moment = require('moment');
+const countdown = require('countdown');
+require('moment-countdown');
 const SQL_STATEMENTS = require('./sqlStatements');
 const createHelpers = require('./createHelpers');
 const twitterHelpers = require('./twitterHelpers');
@@ -83,6 +86,8 @@ app.get('/c/:uuid', function (req, res) {
 
 		let now = new Date().getTime();
 		let info = infos[0];
+		let end = info.endTimestamp;
+		let isRelativeCountdown = info.startTimestamp != null;
 		let hashtagsArray = [];
 		let percentage = null;
 
@@ -91,8 +96,7 @@ app.get('/c/:uuid', function (req, res) {
 		remainingSeconds = remainingSeconds < 0 ? 0 : remainingSeconds;
 
 		// calculate current downlaod progress percentage
-		if (info.startTimestamp) {
-			let end = info.endTimestamp;
+		if (isRelativeCountdown) {
 			let start = info.startTimestamp;
 
 			let totalDiff = end - start;
@@ -103,6 +107,9 @@ app.get('/c/:uuid', function (req, res) {
 				percentage = percentage > 100 ? 100 : percentage;
 			}
 		}
+
+		let countdown = moment().countdown(end).toString();
+		let endDate = moment(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
 
 		// Fetch associated hashtags
 		let id = info.id;
@@ -120,16 +127,19 @@ app.get('/c/:uuid', function (req, res) {
 					let tweetsVisible = tweets && tweets.length > 0;
 
 					res.render('detail', {
+						title: `${info.title} - Soon`,
 						cTitle: info.title,
 						cDescription: info.description,
-						cEndDate: new Date(info.endTimestamp).toISOString(),
+						cEndDate: endDate,
 						cHashtags: hashtagsString,
 						cPercentage: percentage,
 						cPercentageBarValue: percentage/2,
+						cCountdown: countdown,
 						percentageVisible: percentage != null,
 						remainingSeconds: remainingSeconds,
 						tweetsVisible: tweetsVisible,
-						tweets: tweets
+						tweets: tweets,
+						isRelativeCountdown: isRelativeCountdown
 					});
 				}
 
@@ -138,6 +148,8 @@ app.get('/c/:uuid', function (req, res) {
 						.catch((error) => {
 							console.error(error);
 						}).then((tweets) => {
+							let statuses = tweets.statuses;
+							twitterHelpers.patchStatuses(statuses);
 							debugger;
 							return render(tweets.statuses);
 						});
@@ -151,18 +163,18 @@ app.get('/c/:uuid', function (req, res) {
 app.listen(3000, function () {
 	console.log('Soon is available on port 3000!');
 });
-
-function cleanup() {
-	console.log('Shutting down...');
-	db.close();
-}
-
-process.on('exit', (code) => {
-	cleanup();
-	process.exit(code);
-});
-
-process.on('SIGINT', (code) => {
-	cleanup();
-	process.exit(code);
-});
+//
+// function cleanup() {
+// 	console.log('Shutting down...');
+// 	db.close();
+// }
+//
+// process.on('exit', (code) => {
+// 	cleanup();
+// 	process.exit(code);
+// });
+//
+// process.on('SIGINT', (code) => {
+// 	cleanup();
+// 	process.exit(code);
+// });

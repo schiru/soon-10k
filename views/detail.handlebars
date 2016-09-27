@@ -3,14 +3,16 @@
 
 <article id="countdown" class="c">
 	<h2>{{cTitle}}</h2>
+	<p>ending at {{cEndDate}}</p>
 	{{#if percentageVisible}}
 	<div class="bar">
-		<span class="label">{{cPercentage}}% completed</span>
+		<span class="label">{{cCountdown}} left</span>
 	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{remainingSeconds}}s linear 1 forwards;"></span>
 	</div>
 	{{/if}}
-	<p>x days, y hours, z minutes and z seconds left</p>
-	<p>Ending at {{cEndDate}}</p>
+	{{#isRelativeCountdown}}
+	<p>{{cPercentage}}% completed</p>
+	{{/isRelativeCountdown}}
 	<p>{{cDescription}}</p>
 </article>
 {{#if tweetsVisible}}
@@ -21,7 +23,7 @@
 		<li>
 			<article class="card">
 				<h3>{{user.name}} (@{{user.screen_name}})</h3>
-				<time>{{created_at}}</time>
+				<time>{{created_at_relative}}</time>
 				<p>{{text}}</p>
 			</article>
 		</li>
