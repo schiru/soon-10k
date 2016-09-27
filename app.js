@@ -47,7 +47,14 @@ app.post('/create', function(req, res) {
 
 			createHelpers.createCountdown(values, hashtagsArray).then(countdownId => {
 				console.log('countdown created');
-				res.redirect(`/c/${countdownId}`);
+
+				//TODO: restructure create process
+				let selectCountdownStatement = SQL_STATEMENTS.select.countdown;
+				db.get(selectCountdownStatement, [countdownId], (error, row) => {
+					//TODO: error handling
+					res.redirect(`/c/${row.uuid}`);
+				});
+
 			}).catch(error => {
 				console.error('error in createCountdown chain: ', error);
 			});
@@ -58,27 +65,16 @@ app.post('/create', function(req, res) {
 	});
 });
 
-app.get('/c/:id', function (req, res) {
-	let id;
-	try {
-		id = parseInt(req.params.id);
+app.get('/c/:uuid', function (req, res) {
+	let uuid = req.params.uuid;
 
-		if (isNaN(id))
-			throw new Error('countdown id malformed');
-	} catch(error) {
-		console.error(error);
-		res.status(400);
-		res.end();
-		return;
-	}
-
-	console.log(`detail view for id ${id} requested...`);
-	let selectCountdownStatement = SQL_STATEMENTS.select.countdown;
+	console.log(`detail view for uuid ${uuid} requested...`);
+	let selectCountdownStatement = SQL_STATEMENTS.select.countdownByUUID;
 	let selectHashtagsStatement = SQL_STATEMENTS.select.hashtagsForCountdown;
 
-	db.all(selectCountdownStatement, [id], (error, infos) => {
+	db.all(selectCountdownStatement, [uuid], (error, infos) => {
 		if (error || infos.length !== 1) {
-			console.log(`could not fetch id ${id}`);
+			console.log(`could not fetch uuid ${uuid}`);
 			res.status(404);
 			// TODO: Implement 404 page
 			res.end('Countdown not found');
@@ -109,6 +105,7 @@ app.get('/c/:id', function (req, res) {
 		}
 
 		// Fetch associated hashtags
+		let id = info.id;
 		db.each(selectHashtagsStatement, [id], (error, hashtag) => {
 			if (error) {
 				throw error;

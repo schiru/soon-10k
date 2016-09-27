@@ -1,6 +1,7 @@
 'use strict';
 
 const passwordHash = require('password-hash');
+const uuid = require('uuid');
 
 const SQL_STATEMENTS = require('./sqlStatements');
 const sqlite3 = require('sqlite3').verbose();
@@ -233,6 +234,7 @@ module.exports.generateValues = function (req, res) {
 	var end = endDate.getTime();
 
 	var values = {
+		'$uuid': uuid.v4(),
 		'$title': req.body.title,
 		'$description': req.body.description,
 		'$startTimestamp': start,

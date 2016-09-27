@@ -2,6 +2,7 @@ module.exports = {
 	init: [
 		`CREATE TABLE IF NOT EXISTS 'countdown' (
 			'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+			'uuid' TEXT NOT NULL UNIQUE,
 			'title'	TEXT NOT NULL,
 			'description'	TEXT,
 			'startTimestamp'	INTEGER,
@@ -22,15 +23,18 @@ module.exports = {
 		)`
 	],
 	insert: {
-		createCountdown: `INSERT INTO countdown (title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
-						VALUES ($title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`,
+		createCountdown: `INSERT INTO countdown (uuid, title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
+						VALUES ($uuid, $title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`,
 		createHashtag: `INSERT INTO hashtag ('name') VALUES (?);`,
 		createHashtagAssociation: `INSERT INTO hashtagAssociation (hashtagId, countdownId) VALUES(?, ?)`
 	},
 	select: {
-		countdown: `SELECT cd.id, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
+		countdown: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
 			FROM countdown cd
 			WHERE cd.id = ?`,
+		countdownByUUID: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
+			FROM countdown cd
+			WHERE cd.uuid = ?`,
 		hashtagsForCountdown: `SELECT ht.name
 			FROM hashtagAssociation hA
 			JOIN hashtag ht ON hA.hashtagId = ht.id
