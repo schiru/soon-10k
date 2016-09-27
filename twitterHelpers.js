@@ -31,6 +31,6 @@ module.exports.patchStatuses = function(twitterStatuses) {
 	}
 
 	twitterStatuses.forEach(status => {
-		status.created_at_relative = moment(status.created_at).fromNow();
+		status.created_at_relative = moment(parseInt(status.created_at)).fromNow();
 	});
 }
