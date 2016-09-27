@@ -38,6 +38,20 @@ module.exports = {
 		hashtagsForCountdown: `SELECT ht.name
 			FROM hashtagAssociation hA
 			JOIN hashtag ht ON hA.hashtagId = ht.id
-			WHERE hA.countdownId = ?`
+			WHERE hA.countdownId = ?`,
+		recentCountdowns: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
+			FROM countdown cd
+			ORDER BY cd.createdTimestamp DESC
+			LIMIT 5`,
+		endingCountdowns: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
+			FROM countdown cd
+			WHERE (cd.endTimestamp - (STRFTIME('%s','now')*1000)) > 0
+			ORDER BY (cd.endTimestamp - STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))
+			LIMIT 5`,
+		featuredCountdowns: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
+			FROM countdown cd
+			WHERE (cd.endTimestamp - (STRFTIME('%s','now')*1000)) > 0
+			ORDER BY cd.id
+			LIMIT 3`
 	}
 };

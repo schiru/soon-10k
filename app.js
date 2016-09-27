@@ -14,6 +14,7 @@ require('moment-countdown');
 const SQL_STATEMENTS = require('./sqlStatements');
 const createHelpers = require('./createHelpers');
 const twitterHelpers = require('./twitterHelpers');
+const handlebarsHelpers = require('./handlebarsHelpers');
 
 if (cluster.isMaster) {
 
@@ -39,7 +40,7 @@ if (cluster.isMaster) {
 
 	var app = express();
 
-	app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+	app.engine('handlebars', exphbs({defaultLayout: 'main', helpers: handlebarsHelpers}));
 	app.set('view engine', 'handlebars');
 
 	app.use(compression());
@@ -48,9 +49,38 @@ if (cluster.isMaster) {
 	app.use(bodyParser.urlencoded({ extended: true }));
 
 	app.get(['/', 'index'], function (req, res) {
-			res.render('index', {
-				title: "Soon"
+
+		//TODO: move function to other location/file
+		let queryAllPromise = function(sqlStatement) {
+			return new Promise((resolve, reject) => {
+				db.all(sqlStatement, (error, rows) => {
+					if (error) {
+						reject(error);
+					} else {
+						resolve(rows);
+					}
+				});
 			});
+		};
+
+		let renderContext = {
+			title: "Soon"
+		};
+
+		queryAllPromise(SQL_STATEMENTS.select.endingCountdowns).then((rows) => {
+			renderContext.ending = rows;
+			return queryAllPromise(SQL_STATEMENTS.select.featuredCountdowns);
+		}).then((rows) => {
+			renderContext.featured = rows;
+			return queryAllPromise(SQL_STATEMENTS.select.recentCountdowns);
+		}).then((rows) => {
+			renderContext.recent = rows;
+			res.render('index', renderContext); // render index
+		}).catch((err) => {
+			console.log(err);
+			res.end("Internal Server Error!");
+		});
+
 	});
 
 	app.get('/create', function (req, res) {

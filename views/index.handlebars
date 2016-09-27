@@ -9,52 +9,38 @@
 	</ul>
 </nav>
 <div class="ex dark">
-	<div class="c">
+	<section class="c">
 		<aside class="card">
-			<h2>Popular Countdowns</h2>
+			<h2>Featured Countdowns</h2>
 			<ul>
-				<li>
-					<a href="/c/1">
-						<h3>New Year's Eve 2017 (2 months, 10 days left)</h3>
-						<div class="bar small">
-							<span class="fill" style="transform: translateX(5%); animation: progress 60s linear 1 forwards;"></span>
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="/c/1">
-						<h3>Start of Autumn (9 days left)</h3>
-						<div class="bar small">
-							<span class="fill" style="transform: translateX(12.5%); animation: progress 200s linear 1 forwards;"></span>
-						</div>
-					</a>
-				</li>
-				<li>
-					<a href="/c/1">
-						<h3>1st advent (1 month, 1 day left)</h3>
-						<div class="bar small">
-							<span class="fill" style="transform: translateX(25%); animation: progress 600s linear 1 forwards;"></span>
-						</div>
-					</a>
-				</li>
+				{{#each featured}}
+					<li>
+						<a href="/c/{{uuid}}">
+							<h3>{{title}} ({{timeFromNow endTimestamp}})</h3>
+							<div class="bar small">
+								<span class="fill" style="transform: translateX({{barAnimationPercentage startTimestamp endTimestamp}}%); animation: progress {{barAnimationSeconds endTimestamp}}s linear 1 forwards;"></span>
+							</div>
+						</a>
+					</li>
+				{{/each}}
 			</ul>
 		</aside>
-	</div>
+	</section>
 	<section class="col3 c">
 		<aside class="card">
 			<h2>Ending Soon</h2>
 			<ul>
-				<li><a href="/c/1">Midnight (29 minutes left)</a></li>
-				<li><a href="/c/1">Full Moon (2 days, 10 hours, 35 minutes left)</a></li>
-				<li><a href="/c/1">Christmas (1 month, 35 days left)</a></li>
+				{{#each ending}}
+					<li><a href="/c/{{uuid}}">{{title}} ({{timeFromNow endTimestamp}})</a></li>
+				{{/each}}
 			</ul>
 		</aside>
 		<aside class="card">
 			<h2>Recently Added</h2>
 			<ul>
-				<li><a href="/c/1">Bullshit (20 seconds left)</a></li>
-				<li><a href="/c/1">test (7 days left)</a></li>
-				<li><a href="/c/1">Tea Timer (3 minutes, 21 seconds left)</a></li>
+				{{#each recent}}
+					<li><a href="/c/{{uuid}}">{{title}} ({{timeFromNow endTimestamp}})</a></li>
+				{{/each}}
 			</ul>
 		</aside>
 	</section>
