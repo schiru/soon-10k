@@ -51,6 +51,9 @@ body {
   flex-direction: column;
   background-color: $main-color-dark;
   background-image: repeating-radial-gradient(circle, $main-color-light, $main-color-dark);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
   &:after {
     content : ' ';
     position: fixed;
