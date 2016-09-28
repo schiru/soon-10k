@@ -2,17 +2,17 @@
 
 <section class="c">
 
-	{{#if errors}}
-		<ul class="error">
-		{{#each errors}}
-			<li>{{this}}</li>
-		{{/each}}
-		</ul>
-	{{/if}}
-
 	<h2>Create new Countdown</h2>
 
 	<form id="cf" method="post" action="/create">
+
+		{{#if errors}}
+			<ul class="error">
+			{{#each errors}}
+				<li>{{this}}</li>
+			{{/each}}
+			</ul>
+		{{/if}}
 
 		<div>
 			<label class="bg">

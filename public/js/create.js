@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var tzLabel = document.querySelector('#l_tz');
   var tzInp = tzLabel.querySelector('input');
+  tzLabel.parentNode.insertBefore(tzLabel, tzLabel.parentNode.firstChild); // move to top for not to mess with css
   tzLabel.style.display = "none";
   updateTzValue();
 

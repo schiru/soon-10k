@@ -75,18 +75,20 @@ label.bg {
 
 /* Tab triggers */
 #rel_inp {
-  $rel-inp-gutter-width: 10px;
-  display: flex;
-  flex-flow: row wrap;
-  align-items: stretch;
-  justify-content: space-around;
   label {
     flex-basis: 50%;
-    display: inline;
-    padding-right: $rel-inp-gutter-width;
+    @media (min-width: 768px) {
+      flex-basis: 25%;
+    }
   }
-  label:nth-of-type(even) {
-    padding-right: 0;
+}
+
+#abs_inp {
+  label {
+    flex-basis: 100%;
+    @media (min-width: 768px) {
+      flex-basis: 50%;
+    }
   }
 }
 
@@ -106,6 +108,11 @@ input[type=radio] {
   position: relative;
   overflow: hidden;
   background-color: darken($light-grey, 10%);
+  display: flex;
+  flex-flow: row wrap;
+  > * {
+    padding: 0 10px;
+  }
   &:before {
     content: ' ';
     position: absolute;
@@ -147,12 +154,13 @@ input[type=radio] {
 /* Error Style*/
 .error {
   padding: 20px 30px;
-  max-width: 100%;
-  width: 500px;
   margin: 0 auto;
+  margin-bottom: 20px;
+  max-width: 100%;
   border-radius: 3px;
   border: 1px solid $error-color-dark;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
   background-color: $error-color-default;
   color: $error-font-color-default;
+  font-size: 16px;
 }
