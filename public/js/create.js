@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
         dayContainer.removeChild(dayContainer.firstChild);
     }
 
-    let tmp = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+    let tmp = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 0);
     for (var i = 0; i < tmp.getDate(); i++) {
       let dl = new dayLabel(i, setDate);
       dl.innerHTML = ''+i;
@@ -149,8 +149,8 @@ document.addEventListener("DOMContentLoaded", function() {
     renderDPicker();
   }
 
-  function lsYear() { changeMonth(currentDate.getFullYear()-1); }
-  function rsYear() { changeMonth(currentDate.getFullYear()+1); }
+  function lsYear() { changeYear(currentDate.getFullYear()-1); }
+  function rsYear() { changeYear(currentDate.getFullYear()+1); }
 
   function renderDPicker() {
     yearLabel.setLabelText(currentDate.getFullYear());
