@@ -156,7 +156,7 @@ if (cluster.isMaster) {
 			}
 
 			let countdown = moment().countdown(end).toString();
-			let endDate = moment(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
+			let endDate = moment.utc(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
 
 			// Fetch associated hashtags
 			let id = info.id;
