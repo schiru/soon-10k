@@ -138,9 +138,9 @@ if (cluster.isMaster) {
 			let hashtagsArray = [];
 			let percentage = null;
 
-			let remainingSeconds = (info.endTimestamp - now) / 1000;
-			remainingSeconds = Math.ceil(remainingSeconds);
-			remainingSeconds = remainingSeconds < 0 ? 0 : remainingSeconds;
+			let animationSeconds = (info.endTimestamp - info.startTimestamp) / 1000;
+			animationSeconds = Math.ceil(animationSeconds);
+			animationSeconds = animationSeconds < 0 ? 0 : animationSeconds;
 
 			// calculate current downlaod progress percentage
 			if (isRelativeCountdown) {
@@ -183,7 +183,7 @@ if (cluster.isMaster) {
 							cPercentageBarValue: percentage/2,
 							cCountdown: countdown,
 							percentageVisible: percentage != null,
-							remainingSeconds: remainingSeconds,
+							animationSeconds: animationSeconds,
 							tweetsVisible: tweetsVisible,
 							tweets: tweets,
 							isRelativeCountdown: isRelativeCountdown,

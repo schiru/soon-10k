@@ -7,7 +7,7 @@
 	{{#if percentageVisible}}
 	<div class="bar">
 		<span class="label">{{cCountdown}} left</span>
-	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{remainingSeconds}}s linear 1 forwards;"></span>
+	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{animationSeconds}}s linear 1 forwards;"></span>
 	</div>
 	{{/if}}
 	{{#isRelativeCountdown}}

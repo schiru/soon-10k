@@ -24,11 +24,11 @@ helpers.barAnimationPercentage = function(startTimestamp, endTimestamp) {
 }
 
 helpers.barAnimationSeconds = function(endTimestamp) {
-  let remainingSeconds = (parseInt(endTimestamp) - moment.now().valueOf()) / 1000;
-  remainingSeconds = Math.ceil(remainingSeconds);
-  remainingSeconds = remainingSeconds < 0 ? 0 : remainingSeconds;
+  let animationSeconds = (parseInt(endTimestamp) - moment.now().valueOf()) / 1000;
+  animationSeconds = Math.ceil(animationSeconds);
+  animationSeconds = animationSeconds < 0 ? 0 : animationSeconds;
 
-  return remainingSeconds;
+  return animationSeconds;
 }
 
 module.exports = helpers;
