@@ -46,7 +46,7 @@ module.exports = {
 		endingCountdowns: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
 			FROM countdown cd
 			WHERE (cd.endTimestamp - (STRFTIME('%s','now')*1000)) > 0
-			ORDER BY (cd.endTimestamp - STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW'))
+			ORDER BY (cd.endTimestamp - STRFTIME('%s', 'now')*1000)
 			LIMIT 5`,
 		featuredCountdowns: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
 			FROM countdown cd
