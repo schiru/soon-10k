@@ -43,13 +43,13 @@
 				<h3>Target date</h3>
 				<label>
 					Date (YYYY-MM-DD):
-					<input type="text" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
+					<input type="text" id="date" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
 				</label>
 				<label>
 					Time (HH:MM:SS):
-					<input type="text" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
+					<input type="text" id="time" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
 				</label>
-				<label>
+				<label id="l_tz">
 					Target UTC/GMT timezone:
 					<input type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
 				</label>
@@ -86,3 +86,5 @@
 
 	</form>
 </section>
+
+<script src="/js/create.js" charset="utf-8"></script>
