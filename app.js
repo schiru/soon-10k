@@ -151,7 +151,7 @@ if (cluster.isMaster) {
 				let totalDiff = end - start;
 				if (totalDiff > 0 && currentDiff < totalDiff) {
 					percentage = 100 - (100*(currentDiff/totalDiff));
-					percentage = Math.round(percentage);
+					percentage = Math.floor(percentage);
 					percentage = percentage > 100 ? 100 : percentage;
 				}
 			}
@@ -185,7 +185,7 @@ if (cluster.isMaster) {
 			else {
 				countdownDateText = 'Countdown ended';
 			}
-			let endDate = moment(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
+			let endDate = moment.utc(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
 
 			// Fetch associated hashtags
 			let id = info.id;
