@@ -13,7 +13,7 @@ module.exports.getTweetsForHashtags = function(hashtagsArray) {
 	let hashtagsQuery = hashtagsArray.join(' OR ');
 	console.log('requesting tweets for hashtags ' + hashtagsQuery);
 	return new Promise((resolve, reject) => {
-		twitterClient.get('search/tweets', {q: hashtagsQuery}, function(error, tweets, response) {
+		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 9}, function(error, tweets, response) {
 		   if (error) {
 				 reject(error);
 				 return null;
