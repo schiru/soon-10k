@@ -1,10 +1,57 @@
+#titel {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: 38px;
+  @media (min-width: 768px) {
+    font-size: 48px;
+  }
+}
+
+#desc {
+  border-left: 4px solid $main-font-color-light;
+  padding: 10px 20px;
+  text-align: left;
+  margin: 40px 10px;
+  font-size: 28px;
+  @media (min-width: 768px) {
+    font-size: 42px;
+  }
+}
+
+.cd {
+  font-size: 16px;
+  margin: -20px 0 20px 0;
+  display: inline-block;
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
+  &.big {
+    font-weight: 900;
+    font-size: 22px;
+    margin: 20px 0;
+    @media (min-width: 768px) {
+      font-size: 32px;
+    }
+  }
+}
+
+#end {
+  font-size: 16px;
+  @media (min-width: 768px) {
+    font-size: 22px;
+  }
+}
+
+#countdown {
+  margin-bottom: 100px !important;
+}
 
 .bar {
   height: 50px;
   position: relative;
   border: 3px solid $dark-grey;
   background-color: $dark-grey;
-  border-radius: 25px;
+  border-radius: 5px;
   overflow: hidden;
 
   &.small {
@@ -17,6 +64,7 @@
     z-index: 99;
     width: 100%;
     line-height: 46px;
+    font-size: 28px;
     margin: 0;
     vertical-align: middle;
     font-weight: 900;
@@ -28,7 +76,7 @@
     height: 100%;
     width: 200%;
     margin-left: -100%;
-    border-radius: 20px;
+    border-radius: 3px;
     background-color: $main-color-default;
     position: relative;
     overflow: hidden;
@@ -51,7 +99,7 @@
     z-index: 1;
     background-size: 50px 50px;
     animation: move 2s linear infinite;
-    border-radius: 20px;
+    border-radius: 3px;
     overflow: hidden;
     animation: animate-background 5s linear infinite;
   }

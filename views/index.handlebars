@@ -5,14 +5,15 @@
 	</h2>
 	<ul>
 		<li><a href="/create" class="butt">Create a Countdown</a></li>
-		<li><input type="text" placeholder="Countdown ID"/> <button>Go to</button>
 	</ul>
 </nav>
 <div class="ex dark">
 	<section class="c">
 		<aside class="card">
-			<h2>Featured Countdowns</h2>
-			<ul>
+			<div class="head">
+				<h2>Featured Countdowns</h2>
+			</div>
+			<ul class="body">
 				{{#each featured}}
 					<li>
 						<a href="/c/{{uuid}}">
@@ -28,16 +29,20 @@
 	</section>
 	<section class="col3 c">
 		<aside class="card">
-			<h2>Ending Soon</h2>
-			<ul>
+			<div class="head">
+				<h2>Ending Soon</h2>
+			</div>
+			<ul class="body">
 				{{#each ending}}
 					<li><a href="/c/{{uuid}}">{{title}} ({{timeFromNow endTimestamp}})</a></li>
 				{{/each}}
 			</ul>
 		</aside>
 		<aside class="card">
-			<h2>Recently Added</h2>
-			<ul>
+			<div class="head">
+				<h2>Recently Added</h2>
+			</div>
+			<ul class="body">
 				{{#each recent}}
 					<li><a href="/c/{{uuid}}">{{title}} ({{timeFromNow endTimestamp}})</a></li>
 				{{/each}}

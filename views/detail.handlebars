@@ -2,29 +2,35 @@
 {{> top-logo-bar}}
 
 <article id="countdown" class="c">
-	<h2>{{cTitle}}</h2>
-	<p>ending at {{cEndDate}}</p>
-	{{#if percentageVisible}}
-	<div class="bar">
-		<span class="label">{{cCountdownDate}} <span id="cd-server">{{cCountdownTime}}</span><span id="cd-h"></span> <span id="cd-m"></span> <span id="cd-s"></span></span>
-	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{animationSeconds}}s linear 1 forwards;"></span>
+	<h2 id="titel">{{cTitle}}</h2>
+	<p id="desc">{{cDescription}}</p>
+	<div class="card body">
+		<p class="cd big">{{cCountdownDate}} <span id="cd-server">{{cCountdownTime}}</span></p>
+		<p class="cd {{#unless cCountdownDate}}big{{/unless}}"><span id="cd-h"></span> <span id="cd-m"></span> <span id="cd-s"></span></p>
+		{{#if isRelativeCountdown}}
+		<div class="bar">
+			<span class="label">{{cPercentage}}%</span>
+		  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{animationSeconds}}s linear 1 forwards;"></span>
+		</div>
+		{{/if}}
+		<p id="end">
+			ending at {{cEndDate}}
+		</p>
 	</div>
-	{{/if}}
-	{{#isRelativeCountdown}}
-	<p>{{cPercentage}}% completed</p>
-	{{/isRelativeCountdown}}
-	<p>{{cDescription}}</p>
 </article>
 {{#if tweetsVisible}}
+
 <section id="tweets" class="dark">
 	<h2>{{cHashtags}}</h2>
 	<ul class="col3 c t">
 		{{#each tweets}}
 		<li>
 			<article class="card">
-				<h3>{{user.name}} (@{{user.screen_name}})</h3>
-				<time>{{created_at_relative}}</time>
-				<p>{{text}}</p>
+				<div class="head">
+					<h3>{{user.name}} (@{{user.screen_name}})</h3>
+					<time>{{created_at_relative}}</time>
+				</div>
+				<p class="body">{{text}}</p>
 			</article>
 		</li>
 		{{/each}}

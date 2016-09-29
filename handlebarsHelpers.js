@@ -3,7 +3,11 @@ const countdown = require('countdown');
 const helpers = {};
 
 helpers.timeFromNow = function(timestamp) {
-  return moment(parseInt(timestamp)).fromNow();
+  if (timestamp > moment.now().valueOf()) {
+    return 'ending '+moment(parseInt(timestamp)).fromNow();
+  } else {
+    return 'ended '+moment(parseInt(timestamp)).fromNow();
+  }
 }
 
 helpers.percentage = function(startTimestamp, endTimestamp) {

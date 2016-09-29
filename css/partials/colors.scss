@@ -1,10 +1,12 @@
+$base-color: #00ffea;
+
 $main-font-color-default: #fff;
 $main-font-color-light: #fff;
 $main-font-color-dark: #111;
 
-$main-color-default: #006764;
-$main-color-light: #31fff5;
-$main-color-dark: #064846;
+$main-color-default: darken($base-color, 10%);
+$main-color-light: lighten($base-color, 20%);
+$main-color-dark: darken($base-color, 30%);
 
 $light-grey: #EEE;
 $dark-grey: #083130;
@@ -13,3 +15,6 @@ $grey-default: #AAA;
 $error-color-default: #DB3D3D;
 $error-color-dark: #8E1414;
 $error-font-color-default: #FFF;
+
+$link-color: #FF9900;
+$link-hover: $dark-grey;
