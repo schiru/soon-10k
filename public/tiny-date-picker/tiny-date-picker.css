@@ -1,0 +1,13 @@
+div.tiny-date-picker {
+  max-width: 500px;
+}
+
+div.tiny-date-picker > div{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+div.tiny-date-picker span.day-label {
+  flex-basis: 14.28% !important;
+}
