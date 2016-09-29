@@ -134,20 +134,21 @@ if (cluster.isMaster) {
 			let now = new Date().getTime();
 			let info = infos[0];
 			let end = info.endTimestamp;
+
+			let currentDiff = end - now;
+
 			let isRelativeCountdown = info.startTimestamp != null;
 			let hashtagsArray = [];
 			let percentage = null;
 
 			let animationSeconds = (info.endTimestamp - info.startTimestamp) / 1000;
-			animationSeconds = Math.ceil(animationSeconds);
+			animationSeconds = Math.floor(animationSeconds);
 			animationSeconds = animationSeconds < 0 ? 0 : animationSeconds;
 
 			// calculate current downlaod progress percentage
 			if (isRelativeCountdown) {
 				let start = info.startTimestamp;
-
 				let totalDiff = end - start;
-				let currentDiff = end - now;
 				if (totalDiff > 0 && currentDiff < totalDiff) {
 					percentage = 100 - (100*(currentDiff/totalDiff));
 					percentage = Math.round(percentage);
@@ -155,7 +156,35 @@ if (cluster.isMaster) {
 				}
 			}
 
-			let countdown = moment().countdown(end).toString();
+			let cd = countdown(new Date(end));
+			console.log('countdown:', cd.toString());
+
+			let countdownDateText = '';
+			let countdownTimeText = '';
+			if (currentDiff > 0) {
+				debugger;
+				if (cd.years > 0) {
+					countdownDateText = cd.years + (cd.years != 1 ? ' years' : ' year') + ', ';
+				}
+
+				if (cd.months > 0) {
+					countdownDateText += cd.months + (cd.months != 1 ? ' months' : ' month') + ', ';
+				}
+
+				if (cd.days > 0) {
+					countdownDateText += cd.days + (cd.days != 1 ? ' days' : ' days') + ', ';
+				}
+
+				let fields = countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
+
+				let cdTime = countdown(new Date(), new Date(end), fields)
+				if (cdTime.days > 0) delete cdTime.seconds;
+				delete cdTime.days;
+				countdownTimeText = cdTime.toString() + ' left';
+			}
+			else {
+				countdownDateText = 'Countdown ended';
+			}
 			let endDate = moment(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
 
 			// Fetch associated hashtags
@@ -181,7 +210,8 @@ if (cluster.isMaster) {
 							cHashtags: hashtagsString,
 							cPercentage: percentage,
 							cPercentageBarValue: percentage/2,
-							cCountdown: countdown,
+							cCountdownDate: countdownDateText,
+							cCountdownTime: countdownTimeText,
 							percentageVisible: percentage != null,
 							animationSeconds: animationSeconds,
 							tweetsVisible: tweetsVisible,
@@ -190,7 +220,8 @@ if (cluster.isMaster) {
 							metaRefresh: {
 								delay: 30, //in seconds
 								url: `/c/${info.uuid}`
-							}
+							},
+							jsCEndTime: info.endTimestamp
 						});
 					}
 

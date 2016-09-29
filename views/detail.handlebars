@@ -6,7 +6,7 @@
 	<p>ending at {{cEndDate}}</p>
 	{{#if percentageVisible}}
 	<div class="bar">
-		<span class="label">{{cCountdown}} left</span>
+		<span class="label">{{cCountdownDate}} <span id="cd-server">{{cCountdownTime}}</span><span id="cd-h"></span> <span id="cd-m"></span> <span id="cd-s"></span></span>
 	  <span class="fill" style="transform: translateX({{cPercentageBarValue}}%); animation: progress {{animationSeconds}}s linear 1 forwards;"></span>
 	</div>
 	{{/if}}
@@ -31,3 +31,12 @@
 	</ul>
 </section>
 {{/if}}
+
+<script>
+	SOON = {
+		{{#if jsCEndTime}}
+		countdownEndTime: {{jsCEndTime}}
+		{{/if}}
+	};
+</script>
+<script src="/js/detail.js" charset="utf-8"></script>
