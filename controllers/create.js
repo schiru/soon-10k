@@ -29,6 +29,8 @@ module.exports.post = (req, res) => {
 
 			}).catch(error => {
 				console.error('error in createCountdown chain: ', error);
+				res.status(500);
+				res.end("Internal Server Error");
 			});
 		} else {
 			let cdIsRel = (req.body.cdType == 'rel') ? true : false;

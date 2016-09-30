@@ -52,6 +52,7 @@ module.exports = {
 			FROM countdown cd
 			WHERE (cd.endTimestamp - (STRFTIME('%s','now')*1000)) > 0
 			ORDER BY cd.id
-			LIMIT 3`
+			LIMIT 3`,
+		hashtagByName: `SELECT id FROM hashtag WHERE LOWER(name)= LOWER(?)`
 	}
 };

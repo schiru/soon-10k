@@ -5,11 +5,12 @@ const uuid = require('uuid');
 
 const SQL_STATEMENTS = require.main.require('./sqlStatements');
 const db = global.db;
+const dbHelpers = require('./dbHelpers');
 
 module.exports.createCountdown = function(values, hashtagsArray) {
 	let statement = SQL_STATEMENTS.insert.createCountdown;
 
-	return executeInsertStatement(statement, values).then(createdCountdownId => {
+	return dbHelpers.runStatement(statement, values).then(createdCountdownId => {
 		console.log('countdown created, id: ' + createdCountdownId);
 		let promises = [];
 		hashtagsArray.forEach(hashtag => {
@@ -25,44 +26,20 @@ module.exports.createCountdown = function(values, hashtagsArray) {
 }
 
 function createHashtag(title) {
-	console.log('creating hashtag..')
+	console.log('creating hashtag..');
 	let statement = SQL_STATEMENTS.insert.createHashtag;
- 	return executeInsertStatement(statement, [title]).catch(error => {
-		// TODO: if error, check if hashtag does already exist
-		// if so, fetch id and return it
+
+	// Check if hashtag already exists
+	dbHelpers.queryAll(SQL_STATEMENTS.select.hashtagByName)
+
+ 	return dbHelpers.runStatement(statement, [title]).catch(error => {
 	});
 };
 
 function associateHashtagAndCountdown(hashtagId, countdownId) {
 	let statement = SQL_STATEMENTS.insert.createHashtagAssociation;
 	let values = [hashtagId, countdownId];
- 	return executeInsertStatement(statement, values);
-}
-
-function executeInsertStatement(statement, values) {
-	console.log('executing sql statement');
-	debugger;
-	let promise = new Promise((resolve, reject) => {
-		let preparedStatement = db.prepare(statement);
-		preparedStatement.bind(values, error => {
-			if (error != null) {
-				console.error(error);
-				throw error;
-			}
-
-			console.log('running prepared statement');
-			preparedStatement.run(function(error) {
-				if (error != null) {
-					console.error(error);
-					throw error;
-				}
-
-				resolve(this.lastID);
-			});
-		});
-	});
-
-	return promise;
+ 	return dbHelpers.runStatement(statement, values);
 }
 
 /**
