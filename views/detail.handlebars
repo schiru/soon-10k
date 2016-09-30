@@ -2,8 +2,8 @@
 {{> top-logo-bar}}
 
 <article id="countdown" class="c">
-	<h2 id="titel">{{cTitle}}</h2>
-	<p id="desc">{{cDescription}}</p>
+	<h2 id="titel">{{coundown.title}}</h2>
+	<p id="desc">{{coundown.description}}</p>
 	<div class="card body">
 		<p class="cd big">{{cCountdownDate}} <span id="cd-server">{{cCountdownTime}}</span></p>
 		<p class="cd {{#unless cCountdownDate}}big{{/unless}}"><span id="cd-h"></span> <span id="cd-m"></span> <span id="cd-s"></span></p>
@@ -41,6 +41,7 @@
 <script>
 	SOON = {
 		{{#if jsCEndTime}}
+		countdownStartTime: {{coundown.startTimestamp}},
 		countdownEndTime: {{jsCEndTime}}
 		{{/if}}
 	};

@@ -41,6 +41,8 @@
 			let secondsString = (onlySecondsVisible ? '' : ' and ') + cd.secText + ' left';
 			document.querySelector("#cd-s").innerHTML = secondsString;
 
+			document.querySelector('.bar .label').innerHTML = calcPercentage(SOON.countdownStartTime, SOON.countdownEndTime)+'%';
+
 			if (cd.sec == 0 && cd.min == 0 && cd.hrs == 0) {
 				clearInterval(SOON.countdownInterval);
 				setTimeout(() => {location.reload()}, 1000);
@@ -65,6 +67,18 @@
 		}
 
 		return cd;
+	}
+
+	var calcPercentage = function(start, end) {
+		let p = 0;
+		let cDiff = end - new Date().getTime();
+		let tDiff = end - start;
+		if (tDiff > 0 && cDiff < tDiff) {
+			p = 100 - (100*(cDiff/tDiff));
+			p = Math.floor(p);
+			p = p > 100 ? 100 : p;
+		}
+		return p;
 	}
 
 	var setEndingAt = function(endTimestamp) {
