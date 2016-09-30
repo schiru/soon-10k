@@ -1,6 +1,6 @@
 const Twitter = require('twitter');
 const moment = require('moment');
-const KEYS = require('./keys');
+const KEYS = require.main.require('./keys');
 
 const twitterClient = new Twitter({
   consumer_key: KEYS.twitter.consumer_key,
