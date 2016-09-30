@@ -20,14 +20,13 @@ module.exports = {
 			PRIMARY KEY('hashtagId','countdownId'),
 			FOREIGN KEY('hashtagId') REFERENCES hashtag(id),
 			FOREIGN KEY('countdownId') REFERENCES countdown(id)
-		)`,
+		) WITHOUT ROWID;`,
 		`CREATE TABLE IF NOT EXISTS 'dirtyTwitterCache' (
-			'countdownId'	INTEGER NOT NULL UNIQUE,
+			'countdownId'	INTEGER,
 			'cache'	TEXT,
 			'expires'	INTEGER NOT NULL,
-			PRIMARY KEY('countdownId'),
-			FOREIGN KEY('countdownId') REFERENCES countdown(id)
-		)`
+			PRIMARY KEY('countdownId')
+		) WITHOUT ROWID;`
 	],
 	insert: {
 		createCountdown: `INSERT INTO countdown (uuid, title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
