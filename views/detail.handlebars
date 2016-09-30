@@ -3,7 +3,9 @@
 
 <article id="countdown" class="c">
 	<h2 id="titel">{{cTitle}}</h2>
+	{{#if cDescription}}
 	<p id="desc">{{cDescription}}</p>
+	{{/if}}
 	<div class="card body">
 		<p class="cd big">{{cCountdownDate}} <span id="cd-server">{{cCountdownTime}}</span></p>
 		<p class="cd {{#unless cCountdownDate}}big{{/unless}}"><span id="cd-h"></span> <span id="cd-m"></span> <span id="cd-s"></span></p>
@@ -19,10 +21,16 @@
 	</div>
 </article>
 {{#if tweetsVisible}}
-
 <section id="tweets" class="dark">
 	<h2>{{cHashtags}}</h2>
 	<ul class="col3 c t">
+		{{#if noTweetsWarningVisible}}
+			<article class="card">
+				<div class="head">
+					<p class="body">Tweets for this countdown are not available right now.</p>
+				</div>
+			</article>
+		{{else}}
 		{{#each tweets}}
 		<li>
 			<article class="card">
@@ -34,6 +42,7 @@
 			</article>
 		</li>
 		{{/each}}
+		{{/if}}
 	</ul>
 </section>
 {{/if}}

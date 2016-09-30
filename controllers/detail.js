@@ -90,7 +90,8 @@ module.exports.get = (req, res) => {
 					console.log('rendering details view');
 					debugger;
 					let hashtagsString = hashtagsArray.join(' ');
-					let tweetsVisible = tweets && tweets.length > 0;
+					let tweetsVisible = tweets instanceof Array;
+					let noTweetsWarningVisible = tweetsVisible && tweets.length == 0;
 
 					res.render('detail', {
 						title: `${info.title} - Soon`,
@@ -105,6 +106,7 @@ module.exports.get = (req, res) => {
 						percentageVisible: percentage != null,
 						animationSeconds: animationSeconds,
 						tweetsVisible: tweetsVisible,
+						noTweetsWarningVisible: noTweetsWarningVisible,
 						tweets: tweets,
 						isRelativeCountdown: isRelativeCountdown,
 						metaRefresh: {
@@ -119,10 +121,10 @@ module.exports.get = (req, res) => {
 					twitterHelpers.getTweetsForHashtags(hashtagsArray)
 						.catch((error) => {
 							console.error(error);
+							return render([]);
 						}).then((tweets) => {
 							let statuses = tweets.statuses;
 							twitterHelpers.patchStatuses(statuses);
-							debugger;
 							return render(tweets.statuses);
 						});
 				} else {
