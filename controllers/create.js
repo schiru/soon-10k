@@ -36,11 +36,11 @@ module.exports.post = (req, res) => {
 				res.end("Internal Server Error");
 			});
 		} else {
-			let cdIsRel = (req.body.cdType == 'rel') ? true : false;
+			let cdIsAbs = (req.body.cdType === 'abs') ? true : false;
 			res.render('create', {
 				'ilb': config.inputLengthBounds,
 				'body': req.body,
-				'cdIsRel': cdIsRel,
+				'cdIsAbs': cdIsAbs,
 				'errors': errors
 			}); // render create page with current values and errors
 		}
