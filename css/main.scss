@@ -185,6 +185,9 @@ nav.nav { // traditional nav bar
   background-color: $dark-grey;
   color: $main-font-color-light;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
+  a {
+    color: $base-color-orange;
+  }
 }
 
 @import "partials/index";
