@@ -1,10 +1,8 @@
 # soon specific
-soon.db
 .DS_Store
 
 # Sass
 .sass-cache
-public/css/*.css*
 
 # Logs
 logs
