@@ -20,13 +20,24 @@ module.exports = {
 			PRIMARY KEY('hashtagId','countdownId'),
 			FOREIGN KEY('hashtagId') REFERENCES hashtag(id),
 			FOREIGN KEY('countdownId') REFERENCES countdown(id)
+		)`,
+		`CREATE TABLE IF NOT EXISTS 'dirtyTwitterCache' (
+			'countdownId'	INTEGER NOT NULL UNIQUE,
+			'cache'	TEXT,
+			'expires'	INTEGER NOT NULL,
+			PRIMARY KEY('countdownId'),
+			FOREIGN KEY('countdownId') REFERENCES countdown(id)
 		)`
 	],
 	insert: {
 		createCountdown: `INSERT INTO countdown (uuid, title, description, startTimestamp, endTimestamp, createdTimestamp, deletePassphrase)
 						VALUES ($uuid, $title, $description, $startTimestamp, $endTimestamp, $createdTimestamp, $deletePassphrase)`,
 		createHashtag: `INSERT INTO hashtag ('name') VALUES (?);`,
-		createHashtagAssociation: `INSERT INTO hashtagAssociation (hashtagId, countdownId) VALUES(?, ?)`
+		createHashtagAssociation: `INSERT INTO hashtagAssociation (hashtagId, countdownId) VALUES(?, ?)`,
+		dirtyTwitterCache: `INSERT INTO 'dirtyTwitterCache' ('countdownId','cache','expires') VALUES ($countdownId, $tweets, $expires)`
+	},
+	update: {
+		dirtyTwitterCache: `UPDATE 'dirtyTwitterCache' SET 'cache'=($tweets), 'expires'=($expires) WHERE countdownId=($countdownId)`
 	},
 	select: {
 		countdown: `SELECT cd.id, cd.uuid, cd.title, cd.description, cd.startTimestamp, cd.endTimestamp
@@ -53,6 +64,7 @@ module.exports = {
 			WHERE (cd.endTimestamp - (STRFTIME('%s','now')*1000)) > 0
 			ORDER BY cd.id
 			LIMIT 3`,
-		hashtagByName: `SELECT id FROM hashtag WHERE LOWER(name)= LOWER(?)`
+		hashtagByName: `SELECT id FROM hashtag WHERE LOWER(name)= LOWER(?)`,
+		twitterCacheByCountdown: `SELECT cache, expires FROM dirtyTwitterCache WHERE countdownId = (?)`
 	}
 };

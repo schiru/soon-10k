@@ -28,6 +28,7 @@ helpers.prepareStatement = function(sqlStatement, values) {
 }
 
 helpers.runPreparedStatement = function(preparedStatement) {
+	debugger;
 	return new Promise((resolve, reject) => {
 		preparedStatement.run(function(error) {
 				if (error != null) {
@@ -41,6 +42,7 @@ helpers.runPreparedStatement = function(preparedStatement) {
 }
 
 helpers.runStatement = function(statement, values) {
+	debugger;
 	return helpers.prepareStatement(statement, values).then(preparedStatement => {
 		return helpers.runPreparedStatement(preparedStatement)
 	});
