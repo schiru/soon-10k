@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-  console.log('Ready for takeoff');
-
   var timeInp = document.querySelector('#time');
   timeInp.addEventListener('keyup', updateTzValue);
 
@@ -19,19 +17,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function updateTzValue() {
     var tmpDate = new Date(getDateTimeString(dateInp.value, timeInp.value));
-    if (!isNaN(tmpDate.getTime())) {
-      tzInp.value = getTzOff(tmpDate);
-    } else {
-      tzInp.value = getTzOff(new Date());
-    }
+    tzInp.value = (!isNaN(tmpDate.getTime())) ? getTzOff(tmpDate) : getTzOff(new Date());
   }
 
   function getDateTimeString(dateString, timeString) {
-  	if (timeString != '') {
-  		return dateString+'T'+timeString;
-  	} else {
-      return dateString
-    }
+  	return (timeString != '') ? dateString+'T'+timeString : dateString;
   }
 
 });

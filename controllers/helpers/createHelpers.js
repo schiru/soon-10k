@@ -1,69 +1,67 @@
 'use strict';
 
+const config = require.main.require('./config');
 const passwordHash = require('password-hash');
 const uuid = require('uuid');
 
-const SQL_STATEMENTS = require('./sqlStatements');
-const sqlite3 = require('sqlite3').verbose();
+const SQL_STATEMENTS = require.main.require('./sqlStatements');
 const db = global.db;
+const dbHelpers = require('./dbHelpers');
 
 module.exports.createCountdown = function(values, hashtagsArray) {
 	let statement = SQL_STATEMENTS.insert.createCountdown;
 
-	return executeInsertStatement(statement, values).then(createdCountdownId => {
+	return dbHelpers.runStatement(statement, values).then(createdCountdownId => {
 		console.log('countdown created, id: ' + createdCountdownId);
-		let promises = [];
-		hashtagsArray.forEach(hashtag => {
-			promises.push(createHashtag(hashtag).then(createdHashtagId => {
-				return associateHashtagAndCountdown(createdHashtagId, createdCountdownId);
-			}));
-		});
-
-		return Promise.all(promises).then(() => {
+		return associateHashtagsWithCountdown(hashtagsArray, createdCountdownId).then(() => {
 			return createdCountdownId;
-		})
+		});
 	});
 }
 
 function createHashtag(title) {
-	console.log('creating hashtag..')
+	console.log('creating hashtag..');
 	let statement = SQL_STATEMENTS.insert.createHashtag;
- 	return executeInsertStatement(statement, [title]).catch(error => {
-		// TODO: if error, check if hashtag does already exist
-		// if so, fetch id and return it
-	});
+
+ 	return dbHelpers.runStatement(statement, [title]);
 };
 
-function associateHashtagAndCountdown(hashtagId, countdownId) {
-	let statement = SQL_STATEMENTS.insert.createHashtagAssociation;
-	let values = [hashtagId, countdownId];
- 	return executeInsertStatement(statement, values);
+function getHashtagId(title) {
+	let statement = SQL_STATEMENTS.select.hashtagByName;
+
+	return dbHelpers.queryAll(statement, title).then(rows => {
+		debugger;
+		if (rows instanceof Array && rows.length == 1) {
+			return rows[0].id;
+		} else {
+			return null;
+		}
+	}).then(id => {
+		if (id != null && typeof id == "number")
+			return id;
+		else
+			return null;
+	});
 }
 
-function executeInsertStatement(statement, values) {
-	console.log('executing sql statement');
-	debugger;
-	let promise = new Promise((resolve, reject) => {
-		let preparedStatement = db.prepare(statement);
-		preparedStatement.bind(values, error => {
-			if (error != null) {
-				console.error(error);
-				throw error;
+function associateHashtagsWithCountdown(hashtagsArray, countdownId) {
+	let statement = SQL_STATEMENTS.insert.createHashtagAssociation;
+	let promises = [];
+
+	hashtagsArray.forEach(hashtag => {
+		promises.push(getHashtagId(hashtag).then(id => {
+			debugger;
+			if (id == null) {
+				return createHashtag(hashtag);
 			}
 
-			console.log('running prepared statement');
-			preparedStatement.run(function(error) {
-				if (error != null) {
-					console.error(error);
-					throw error;
-				}
-
-				resolve(this.lastID);
-			});
-		});
+			return id;
+		}).then(hashtagId => {
+			return dbHelpers.runStatement(statement, [hashtagId, countdownId]);
+		}));
 	});
 
-	return promise;
+	return Promise.all(promises)
 }
 
 /**
@@ -96,6 +94,14 @@ function validationValueRequired(values, errorMessage, errorsArray) {
 	return isValid;
 }
 
+function validateValueLength(value, range, errorMessage, errorsArray) {
+	if (value.length < range.min || value.length > range.max) {
+		return validationError(errorMessage, errorsArray);
+	} else {
+		return true;
+	}
+}
+
 /**
  * Pushes a errorMessage to the errorsArray and returns false.
  *
@@ -121,10 +127,18 @@ module.exports.validateInput = function (req, res, callback) {
 	var values = req.body;
 	var errors = [];
 	var isValid = true;
+	var ilb = config.inputLengthBounds;
 
 	// validate title
 	let titleValid = true;
 	titleValid = validationValueRequired(values.title, 'A title is required.', errors);
+	titleValid = titleValid && validateValueLength(values.title, ilb.title, `The title is too long. (max ${ilb.title.max} characters)`, errors);
+
+	// validate description
+	let descValid = validateValueLength(values.description, ilb.description, `The discription is too long. (max ${ilb.description.max} characters)`, errors);
+
+	// validate hashtags
+	let hashValid = validateValueLength(values.twitterHashtags, ilb.hashtags, `Too many hashtags. (max ${ilb.hashtags.max} characters)`, errors);
 
 	// validate time input
 	let dateValid = true;
@@ -132,6 +146,10 @@ module.exports.validateInput = function (req, res, callback) {
 
 		dateValid = validationValueRequired(values.abs_date, 'A date is required.', errors)
 								&& validationValueRequired(values.abs_offset, 'A timezone is required.', errors);
+
+		dateValid = dateValid && validateValueLength(values.abs_date, ilb.dateTime.abs.date, 'The date is invalid.', errors);
+		dateValid = dateValid && validateValueLength(values.abs_time, ilb.dateTime.abs.time, 'The date is invalid.', errors);
+		dateValid = dateValid && validateValueLength(values.abs_offset, ilb.dateTime.abs.timezone, 'The date is invalid.', errors);
 
 		if (dateValid) { // date was entered
 			var date = generateAbsDateObject(values.abs_date, values.abs_time, values.abs_offset);
@@ -144,6 +162,11 @@ module.exports.validateInput = function (req, res, callback) {
 
 		dateValid = validationValueRequired([values.days, values.hours, values.minutes, values.seconds], 'A duration is required.', errors);
 
+		dateValid = dateValid && validateValueLength(values.days, ilb.dateTime.rel, 'The duration is invalid.', errors);
+		dateValid = dateValid && validateValueLength(values.hours, ilb.dateTime.rel, 'The duration is invalid.', errors);
+		dateValid = dateValid && validateValueLength(values.minutes, ilb.dateTime.rel, 'The duration is invalid.', errors);
+		dateValid = dateValid && validateValueLength(values.seconds, ilb.dateTime.rel, 'The duration is invalid.', errors);
+
 		if (dateValid) { // date was entered
 			var date = generateRelDateObject(values.days, values.hours, values.minutes, values.seconds);
 			if (isNaN(date.valueOf())) { // check if entered duration was valid
@@ -152,18 +175,18 @@ module.exports.validateInput = function (req, res, callback) {
 		}
 
 	} else {
-		dateValid = validationError('No valid date or duration input!', errors);
+		dateValid = validationError('No valid date or duration input.', errors);
 	}
 
 	// validate passphrase
 	let passValid = true;
-	let minPassLen = 4;
 	passValid = validationValueRequired(values.delpass, 'A delete passphrase is required.', errors);
-	if(passValid && values.delpass.length < minPassLen) {
+	passValid = passValid && validateValueLength(values.delpass, ilb.passphrase, `The delete passphrase is too long. (max ${ilb.passphrase.max} characters)`, errors);
+	if(passValid && values.delpass.length < ilb.passphrase.min) {
 		passValid = validationError(`Passphrase must be at least ${minPassLen} characters.`, errors);
 	}
 
-	isValid = titleValid && dateValid && passValid;
+	isValid = titleValid && hashValid && descValid && dateValid && passValid;
 	callback(isValid, errors);
 };
 

@@ -67,7 +67,7 @@ body {
     z-index: -1;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(circle, $base-color-orange, transparent 2px);
+    background-image: radial-gradient(circle, $base-color-orange 1px, transparent 1px);
     background-size: 10px 10px;
     background-repeat: repeat;
   }
@@ -143,6 +143,7 @@ nav.nav { // traditional nav bar
   overflow: hidden;
   margin: 10px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+  flex-basis: 50%;
   > .head {
     padding: 20px;
     background-color: $dark-grey;
