@@ -58,6 +58,9 @@ function associateHashtagsWithCountdown(hashtagsArray, countdownId) {
 			return id;
 		}).then(hashtagId => {
 			return dbHelpers.runStatement(statement, [hashtagId, countdownId]);
+		}).catch(error => {
+			if (error.code != 'SQLITE_CONSTRAINT')
+				return error;
 		}));
 	});
 
