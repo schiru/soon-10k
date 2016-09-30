@@ -12,16 +12,9 @@ module.exports.createCountdown = function(values, hashtagsArray) {
 
 	return dbHelpers.runStatement(statement, values).then(createdCountdownId => {
 		console.log('countdown created, id: ' + createdCountdownId);
-		let promises = [];
-		hashtagsArray.forEach(hashtag => {
-			promises.push(createHashtag(hashtag).then(createdHashtagId => {
-				return associateHashtagAndCountdown(createdHashtagId, createdCountdownId);
-			}));
-		});
-
-		return Promise.all(promises).then(() => {
+		return associateHashtagsWithCountdown(hashtagsArray, createdCountdownId).then(() => {
 			return createdCountdownId;
-		})
+		});
 	});
 }
 
@@ -29,17 +22,45 @@ function createHashtag(title) {
 	console.log('creating hashtag..');
 	let statement = SQL_STATEMENTS.insert.createHashtag;
 
-	// Check if hashtag already exists
-	dbHelpers.queryAll(SQL_STATEMENTS.select.hashtagByName)
-
- 	return dbHelpers.runStatement(statement, [title]).catch(error => {
-	});
+ 	return dbHelpers.runStatement(statement, [title]);
 };
 
-function associateHashtagAndCountdown(hashtagId, countdownId) {
+function getHashtagId(title) {
+	let statement = SQL_STATEMENTS.select.hashtagByName;
+
+	return dbHelpers.queryAll(statement, title).then(rows => {
+		debugger;
+		if (rows instanceof Array && rows.length == 1) {
+			return rows[0].id;
+		} else {
+			return null;
+		}
+	}).then(id => {
+		if (id != null && typeof id == "number")
+			return id;
+		else
+			return null;
+	});
+}
+
+function associateHashtagsWithCountdown(hashtagsArray, countdownId) {
 	let statement = SQL_STATEMENTS.insert.createHashtagAssociation;
-	let values = [hashtagId, countdownId];
- 	return dbHelpers.runStatement(statement, values);
+	let promises = [];
+
+	hashtagsArray.forEach(hashtag => {
+		promises.push(getHashtagId(hashtag).then(id => {
+			debugger;
+			if (id == null) {
+				return createHashtag(hashtag);
+			}
+
+			return id;
+		}).then(hashtagId => {
+			return dbHelpers.runStatement(statement, [hashtagId, countdownId]);
+		}));
+	});
+
+	return Promise.all(promises)
 }
 
 /**

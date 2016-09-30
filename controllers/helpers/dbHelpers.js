@@ -2,9 +2,9 @@ const db = global.db;
 
 let helpers = {}
 
-helpers.queryAll = function(sqlStatement) {
+helpers.queryAll = function(sqlStatement, values) {
 	return new Promise((resolve, reject) => {
-		db.all(sqlStatement, (error, rows) => {
+		db.all(sqlStatement, values, (error, rows) => {
 			if (error) {
 				reject(error);
 			} else {
