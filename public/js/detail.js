@@ -18,12 +18,6 @@
 		let cd = calcCountdown();
 
 		if (cd) {
-			if (cd.sec == 0 && cd.min == 0 && cd.hrs == 0) {
-				clearInterval(SOON.countdownInterval);
-				setTimeout(() => {location.reload()}, 1000);
-				return;
-			}
-
 			cd.secText = pluralify(cd.sec, 'second');
 			cd.minText = pluralify(cd.min, 'minute');
 			cd.hrsText = pluralify(cd.hrs, 'hour');
@@ -46,6 +40,12 @@
 
 			let secondsString = (onlySecondsVisible ? '' : ' and ') + cd.secText + ' left';
 			document.querySelector("#cd-s").innerHTML = secondsString;
+
+			if (cd.sec == 0 && cd.min == 0 && cd.hrs == 0) {
+				clearInterval(SOON.countdownInterval);
+				setTimeout(() => {location.reload()}, 1000);
+				return;
+			}
 		}
 	};
 
