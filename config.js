@@ -1,5 +1,9 @@
 config = {};
 
+config.dirtyTwitterCache = {
+	cachingDuration: 10 * 1000
+}
+
 config.inputLengthBounds = {
   title: {
     min: 0,

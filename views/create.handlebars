@@ -26,18 +26,14 @@
 				<textarea maxlength="{{ilb.description.max}}" placeholder="Description" name="description">{{body.description}}</textarea>
 			</label>
 
-			<label class="bg">
-				Associated Twitter Hashtags
-				<input maxlength="{{ilb.hashtags.max}}" type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
-			</label>
 
-			<input id="abs" type="radio" name="cdType" value="abs" {{#unless cdIsRel}}checked{{/unless}}>
+			<input id="rel" type="radio" name="cdType" value="rel" {{#unless cdIsAbs}}checked{{/unless}}>
+			<label for="rel" class="tab">
+				Timer
+			</label>
+			<input id="abs" type="radio" name="cdType" value="abs" {{#if cdIsAbs}}checked{{/if}}>
 			<label for="abs" class="tab">
 				Target date
-			</label>
-			<input id="rel" type="radio" name="cdType" value="rel" {{#if cdIsRel}}checked{{/if}}>
-			<label for="rel" class="tab">
-				Relative time from now
 			</label>
 
 			<div id="abs_inp" class="bg">
@@ -57,7 +53,7 @@
 			</div>
 
 			<div id="rel_inp" class="bg">
-				<h3>Relative time</h3>
+				<h3>Timer</h3>
 				<label>
 					Days
 					<input min="0" type="number" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{/if}}">
@@ -77,12 +73,12 @@
 			</div>
 
 			<label class="bg">
-				Delete Passphrase - this should not be one of your passwords (needed to delete the countdown)
-				<input maxlength="{{ilb.passphrase.max}}" type="text" placeholder="Your passphrase" name="delpass">
+				Associated Twitter Hashtags
+				<input maxlength="{{ilb.hashtags.max}}" type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
 			</label>
 		</div>
 
-		<button type="submit">Create</button>
+		<button type="submit">Create and publish</button>
 		<a href="/">Cancel and go back</a>
 
 	</form>

@@ -178,6 +178,7 @@ module.exports.validateInput = function (req, res, callback) {
 		dateValid = validationError('No valid date or duration input.', errors);
 	}
 
+	/* DELETE PROCESS CURRENTLY NOT IMPLEMENTED
 	// validate passphrase
 	let passValid = true;
 	passValid = validationValueRequired(values.delpass, 'A delete passphrase is required.', errors);
@@ -185,8 +186,9 @@ module.exports.validateInput = function (req, res, callback) {
 	if(passValid && values.delpass.length < ilb.passphrase.min) {
 		passValid = validationError(`Passphrase must be at least ${minPassLen} characters.`, errors);
 	}
+	*/
 
-	isValid = titleValid && hashValid && descValid && dateValid && passValid;
+	isValid = titleValid && hashValid && descValid && dateValid;
 	callback(isValid, errors);
 };
 
@@ -263,7 +265,7 @@ module.exports.generateValues = function (req, res) {
 		'$startTimestamp': start,
 		'$endTimestamp': end,
 		'$createdTimestamp': created,
-		'$deletePassphrase': passwordHash.generate(req.body.delpass)
+		'$deletePassphrase': passwordHash.generate('DELETE PASSPHRASE') // DELETE PROCESS CURRENTLY NOT IMPLEMENTED
 	}
 
 	return values;

@@ -29,7 +29,7 @@
       flex-basis: 50%;
       flex-grow: 1;
       width: 100%;
-      border-bottom: 5px solid $main-color-dark;
+      border-bottom: 5px solid $base-color-orange;
       background-color: $dark-grey;
       color: $main-font-color-light;
       padding: 15px 30px 10px 30px;
@@ -122,7 +122,7 @@ input[type=radio] {
 
 #abs:checked {
   ~ label[for="abs"] {
-    background-color: $main-color-dark !important;
+    background-color: $base-color-orange !important;
   }
   ~ #rel_inp {
     max-height: 0;
@@ -133,7 +133,7 @@ input[type=radio] {
 
 #rel:checked {
   ~ label[for="rel"] {
-    background-color: $main-color-dark !important;
+    background-color: $base-color-orange !important;
   }
   ~ #abs_inp {
     max-height: 0;

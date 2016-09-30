@@ -95,8 +95,7 @@ module.exports.get = (req, res) => {
 
 					res.render('detail', {
 						title: `${info.title} - Soon`,
-						cTitle: info.title,
-						cDescription: info.description,
+						countdown: info,
 						cEndDate: endDate,
 						cHashtags: hashtagsString,
 						cPercentage: percentage,
@@ -118,15 +117,14 @@ module.exports.get = (req, res) => {
 				}
 
 				if (hashtagsArray.length > 0) {
-					twitterHelpers.getTweetsForHashtags(hashtagsArray)
-						.catch((error) => {
-							console.error(error);
-							return render([]);
-						}).then((tweets) => {
-							let statuses = tweets.statuses;
-							twitterHelpers.patchStatuses(statuses);
-							return render(tweets.statuses);
-						});
+					twitterHelpers.getTweetsForCountdown(id, hashtagsArray).catch((error) => {
+						console.error(error);
+						return render([]);
+					}).then((tweets) => {
+						let statuses = tweets.statuses;
+						twitterHelpers.patchStatuses(statuses);
+						return render(tweets.statuses);
+					});
 				} else {
 					render();
 				}
