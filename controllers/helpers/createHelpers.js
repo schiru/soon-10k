@@ -3,8 +3,7 @@
 const passwordHash = require('password-hash');
 const uuid = require('uuid');
 
-const SQL_STATEMENTS = require('./sqlStatements');
-const sqlite3 = require('sqlite3').verbose();
+const SQL_STATEMENTS = require.main.require('./sqlStatements');
 const db = global.db;
 
 module.exports.createCountdown = function(values, hashtagsArray) {
