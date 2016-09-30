@@ -8,6 +8,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  font-size: 18px;
   color: $main-font-color-light;
   text-align: center;
 }
@@ -33,9 +34,7 @@ input, button, a.butt, textarea {
   font-size: 18px;
   border: 1px solid $main-color-dark;
   outline: 0;
-  &:focus, &:active {
-    box-shadow:  0 0 3px $main-color-dark;
-  }
+  transition: all .5s;
 }
 
 button, a.butt {
@@ -43,7 +42,8 @@ button, a.butt {
   text-decoration: none;
   background-color: $main-color-default;
   cursor: pointer;
-  transition: all .5s;
+  display: inline-block;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
   &:hover {
     background-color: $main-color-dark;
   }
@@ -70,7 +70,6 @@ body {
     background-image: radial-gradient(circle, $base-color-orange, transparent 2px);
     background-size: 10px 10px;
     background-repeat: repeat;
-    //background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 12px);
   }
 }
 
@@ -93,17 +92,18 @@ nav.nav { // traditional nav bar
   width: 100%;
   z-index: 999;
   ul {
-    margin: 0;
-    padding: 10px;
     text-align: left;
     & > li {
-      display: inline;
-      padding: 5px;
-      a {
-        color: $light-grey;
-        text-decoration: none;
-      }
+      padding: 0 10px;
+      display: inline-block;
     }
+  }
+  a {
+    color: $main-font-color-light;
+    text-decoration: none;
+  }
+  a:hover {
+    color: $link-hover;
   }
 }
 
@@ -111,7 +111,7 @@ nav.nav { // traditional nav bar
   max-width: 1024px;
   width: 100%;
   padding: 0 20px;
-  margin: 10px auto !important;
+  margin: 10px auto;
   flex-grow: 1;
 }
 
@@ -139,10 +139,10 @@ nav.nav { // traditional nav bar
 
 .card {
   border-radius: 3px;
-  box-shadow: 0 2px 3px rgba(0,0,0,.4);
   background-color: $main-color-default;
   overflow: hidden;
   margin: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
   > .head {
     padding: 20px;
     background-color: $dark-grey;
@@ -177,6 +177,7 @@ nav.nav { // traditional nav bar
 .darker {
   background-color: $dark-grey;
   color: $main-font-color-light;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
 }
 
 @import "partials/index";

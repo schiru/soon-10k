@@ -1,6 +1,5 @@
 #titel {
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin: 30px 0 20px 0;
   font-size: 38px;
   @media (min-width: 768px) {
     font-size: 48px;
@@ -8,9 +7,9 @@
 }
 
 #desc {
+  text-align: left;
   border-left: 4px solid $main-font-color-light;
   padding: 10px 20px;
-  text-align: left;
   margin: 40px 10px;
   font-size: 28px;
   @media (min-width: 768px) {
