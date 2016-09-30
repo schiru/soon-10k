@@ -1,20 +1,20 @@
-$base-color: #00ffea;
+$base-color-orange: #FF6F00;
 
 $main-font-color-default: #fff;
 $main-font-color-light: #fff;
-$main-font-color-dark: #111;
+$main-font-color-dark: #161b23;
 
-$main-color-default: darken($base-color, 10%);
-$main-color-light: lighten($base-color, 20%);
-$main-color-dark: darken($base-color, 30%);
+$main-color-default: #2f3a4e;
+$main-color-light: lighten($base-color-orange, 20%);
+$main-color-dark: #1f2735;
 
 $light-grey: #EEE;
-$dark-grey: #083130;
+$dark-grey: #161b23;
 $grey-default: #AAA;
 
 $error-color-default: #DB3D3D;
 $error-color-dark: #8E1414;
 $error-font-color-default: #FFF;
 
-$link-color: #FF9900;
-$link-hover: $dark-grey;
+$link-color: $main-color-dark;
+$link-hover: $base-color-orange;

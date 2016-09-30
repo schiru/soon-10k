@@ -94,8 +94,7 @@ module.exports.get = (req, res) => {
 
 					res.render('detail', {
 						title: `${info.title} - Soon`,
-						cTitle: info.title,
-						cDescription: info.description,
+						coundown: info,
 						cEndDate: endDate,
 						cHashtags: hashtagsString,
 						cPercentage: percentage,
