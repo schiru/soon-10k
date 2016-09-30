@@ -62,7 +62,7 @@ module.exports.get = (req, res) => {
 			}
 
 			if (cd.days > 0) {
-				countdownDateText += cd.days + (cd.days != 1 ? ' days' : ' days') + ', ';
+				countdownDateText += cd.days + (cd.days != 1 ? ' days' : ' day') + ', ';
 			}
 
 			let fields = countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;

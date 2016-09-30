@@ -18,17 +18,17 @@
 		<div>
 			<label class="bg">
 				Title
-				<input type="text" placeholder="Title" name="title" value="{{body.title}}">
+				<input maxlength="{{ilb.title.max}}" type="text" placeholder="Title" name="title" value="{{body.title}}">
 			</label>
 
 			<label class="bg">
 				Description
-				<textarea placeholder="Description" name="description">{{body.description}}</textarea>
+				<textarea maxlength="{{ilb.description.max}}" placeholder="Description" name="description">{{body.description}}</textarea>
 			</label>
 
 			<label class="bg">
 				Associated Twitter Hashtags
-				<input type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
+				<input maxlength="{{ilb.hashtags.max}}" type="text" placeholder="#hash #tag" name="twitterHashtags" value="{{body.twitterHashtags}}">
 			</label>
 
 			<input id="abs" type="radio" name="cdType" value="abs" {{#unless cdIsRel}}checked{{/unless}}>
@@ -44,15 +44,15 @@
 				<h3>Target date</h3>
 				<label>
 					Date (YYYY-MM-DD):
-					<input type="text" id="date" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
+					<input maxlength="{{ilb.dateTime.abs.date.max}}" type="text" id="date" name="abs_date" placeholder="YYYY-MM-DD" value="{{body.abs_date}}">
 				</label>
 				<label>
 					Time (HH:MM:SS):
-					<input type="text" id="time" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
+					<input maxlength="{{ilb.dateTime.abs.time.max}}" type="text" id="time" name="abs_time" placeholder="HH:MM:SS" value="{{body.abs_time}}">
 				</label>
 				<label id="l_tz">
 					Target UTC/GMT timezone:
-					<input type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
+					<input maxlength="{{ilb.dateTime.abs.timezone.max}}" type="number" min="-12" max="14" name="abs_offset" placeholder="0" value="{{#if body}}{{body.abs_offset}}{{else}}0{{/if}}">
 				</label>
 			</div>
 
@@ -60,25 +60,25 @@
 				<h3>Relative time</h3>
 				<label>
 					Days
-					<input type="number" min="0" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{/if}}">
+					<input min="0" type="number" name="days" placeholder="days" value="{{#if body}}{{body.days}}{{/if}}">
 				</label>
 				<label>
 					Hours
-					<input type="number" min="0" name="hours" placeholder="hours" value="{{#if body}}{{body.hours}}{{/if}}">
+					<input min="0" type="number" min="0" name="hours" placeholder="hours" value="{{#if body}}{{body.hours}}{{/if}}">
 				</label>
 				<label>
 					Minutes
-					<input type="number" min="0" name="minutes" placeholder="minutes" value="{{#if body}}{{body.minutes}}{{/if}}">
+					<input min="0" type="number" min="0" name="minutes" placeholder="minutes" value="{{#if body}}{{body.minutes}}{{/if}}">
 				</label>
 				<label>
 					Seconds
-					<input type="number" min="0" name="seconds" placeholder="seconds" value="{{#if body}}{{body.seconds}}{{/if}}">
+					<input min="0" type="number" min="0" name="seconds" placeholder="seconds" value="{{#if body}}{{body.seconds}}{{/if}}">
 				</label>
 			</div>
 
 			<label class="bg">
 				Delete Passphrase - this should not be one of your passwords (needed to delete the countdown)
-				<input type="text" placeholder="Your passphrase" name="delpass">
+				<input maxlength="{{ilb.passphrase.max}}" type="text" placeholder="Your passphrase" name="delpass">
 			</label>
 		</div>
 

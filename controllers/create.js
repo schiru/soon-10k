@@ -2,11 +2,13 @@ const SQL_STATEMENTS = require('../sqlStatements');
 
 const moment = require('moment');
 const countdown = require('countdown');
+const config = require.main.require('./config');
 
 const createHelpers = require('./helpers/createHelpers');
 
 module.exports.get = (req, res) => {
 		res.render('create', {
+			ilb: config.inputLengthBounds,
 			title: "Create Countdown - Soon"
 		});
 };
@@ -14,6 +16,7 @@ module.exports.get = (req, res) => {
 module.exports.post = (req, res) => {
 	createHelpers.validateInput(req, res, function(isValid, errors) {
 		if (isValid) {
+			console.log(isValid);
 			let values = createHelpers.generateValues(req, res);
 			let hashtagsArray = createHelpers.generateHashtagArray(req.body.twitterHashtags);
 
@@ -34,7 +37,12 @@ module.exports.post = (req, res) => {
 			});
 		} else {
 			let cdIsRel = (req.body.cdType == 'rel') ? true : false;
-			res.render('create', {'body': req.body, 'cdIsRel': cdIsRel, 'errors': errors}); // render create page with current values and errors
+			res.render('create', {
+				'ilb': config.inputLengthBounds,
+				'body': req.body,
+				'cdIsRel': cdIsRel,
+				'errors': errors
+			}); // render create page with current values and errors
 		}
 	});
 }

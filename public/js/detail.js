@@ -6,6 +6,7 @@
 			SOON.countdownInterval = setInterval(updateCountdown, 1000);
 			document.querySelector('#cd-server').style.display = 'none';
 			updateCountdown();
+			setEndingAt(SOON.countdownEndTime);
 		}
 	});
 
@@ -64,5 +65,11 @@
 		}
 
 		return cd;
+	}
+
+	var setEndingAt = function(endTimestamp) {
+		var ld = new Date(endTimestamp);
+		var time = ld.toTimeString().split(' ')[0]
+		document.querySelector('#end > span').innerHTML = ld.toDateString()+', '+time;
 	}
 })(SOON);
