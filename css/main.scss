@@ -20,6 +20,7 @@ ul {
 
 a {
   transition: all .5s;
+  color: $link-color;
 }
 
 input, button, a.butt, textarea {
@@ -32,9 +33,13 @@ input, button, a.butt, textarea {
   margin: 10px auto;
   vertical-align: middle;
   font-size: 18px;
-  border: 1px solid $main-color-dark;
+  background-color: #fff;
+  border: 1px solid darken($light-grey, 20%);
   outline: 0;
   transition: all .5s;
+  &:focus {
+    border: 1px solid $base-color-orange;
+  }
 }
 
 button, a.butt {
@@ -44,6 +49,7 @@ button, a.butt {
   cursor: pointer;
   display: inline-block;
   box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+  border: 1px solid $main-color-dark;
   &:hover {
     background-color: $main-color-dark;
   }
