@@ -143,6 +143,7 @@ nav.nav { // traditional nav bar
   overflow: hidden;
   margin: 10px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, .5);
+  flex-basis: 50%;
   > .head {
     padding: 20px;
     background-color: $dark-grey;
