@@ -75,7 +75,7 @@ helpers.cacheTweets = function(cacheExists, tweets, countdownId) {
 }
 
 helpers.getTweetsForHashtags = function(hashtagsArray) {
-	let hashtagsQuery = hashtagsArray.join(' OR ');
+	let hashtagsQuery = hashtagsArray.join(' OR ') + ' lang:en';
 	console.log('requesting tweets for hashtags ' + hashtagsQuery);
 	return new Promise((resolve, reject) => {
 		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 9}, function(error, tweets, response) {
