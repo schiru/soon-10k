@@ -33,9 +33,9 @@ helpers.getTweetsForCountdown = function(countdownId, hashtagsArray) {
 			}
 		}
 
-		if (cacheExists && !cacheExpired) {
+		if (cacheExists) {
 			if (cacheExpired) {
-				fetchTweets.then((tweets, response) => {
+				helpers.getTweetsForHashtags(hashtagsArray).then((tweets, response) => {
 					return helpers.cacheTweets(cacheExists, tweets, countdownId);
 				});
 			}
