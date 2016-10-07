@@ -4,6 +4,7 @@ const moment = require('moment');
 const countdown = require('countdown');
 
 const twitterHelpers = require('./helpers/twitterHelpers');
+const countdownHelpers = require('./helpers/countdownHelpers');
 
 module.exports.get = (req, res) => {
 	let uuid = req.params.uuid;
@@ -46,36 +47,17 @@ module.exports.get = (req, res) => {
 			}
 		}
 
-		let cd = countdown(new Date(end));
-		console.log('countdown:', cd.toString());
-
 		let countdownDateText = '';
 		let countdownTimeText = '';
+		let endDate = moment.utc(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
+
 		if (currentDiff > 0) {
-			debugger;
-			if (cd.years > 0) {
-				countdownDateText = cd.years + (cd.years != 1 ? ' years' : ' year') + ', ';
-			}
-
-			if (cd.months > 0) {
-				countdownDateText += cd.months + (cd.months != 1 ? ' months' : ' month') + ', ';
-			}
-
-			if (cd.days > 0) {
-				countdownDateText += cd.days + (cd.days != 1 ? ' days' : ' day') + ', ';
-			}
-
-			let fields = countdown.DAYS | countdown.HOURS | countdown.MINUTES | countdown.SECONDS;
-
-			let cdTime = countdown(new Date(), new Date(end), fields)
-			if (cdTime.days > 0) delete cdTime.seconds;
-			delete cdTime.days;
-			countdownTimeText = cdTime.toString() + ' left';
+			countdownDateText = countdownHelpers.getCountdownDateText(end);
+			countdownTimeText = countdownHelpers.getCountdownTimeText(end) + ' left';
 		}
 		else {
 			countdownDateText = 'Countdown ended';
 		}
-		let endDate = moment.utc(end).format('dddd, MMMM Do YYYY, h:mm:ss a') + ' (UTC)';
 
 		// Fetch associated hashtags
 		let id = info.id;
