@@ -128,6 +128,15 @@ nav.nav { // traditional nav bar
 		flex-basis: 33%;
 		flex-shrink: 1;
 		flex-grow: 1;
+
+		.body a {
+			color: $base-color-orange;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 }
 
