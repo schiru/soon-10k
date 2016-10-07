@@ -188,6 +188,10 @@ nav.nav { // traditional nav bar
   a:hover {
     color: $link-hover;
   }
+  a, h1, h2, h3, span, p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .dark {
