@@ -78,7 +78,7 @@ helpers.getTweetsForHashtags = function(hashtagsArray) {
 	let hashtagsQuery = hashtagsArray.join(' OR ') + ' lang:en';
 	console.log('requesting tweets for hashtags ' + hashtagsQuery);
 	return new Promise((resolve, reject) => {
-		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 9}, function(error, tweets, response) {
+		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 6}, function(error, tweets, response) {
 		   if (error) {
 				 reject(error);
 				 return null;
@@ -106,7 +106,6 @@ function convertLinksToHTML(status) {
 		return `<a href="${url}" target="_blank">${displayUrl}</a>`
 	};
 
-	console.log('converting links');
 	if (!status || status.entities.urls.length == 0)
 		return;
 
