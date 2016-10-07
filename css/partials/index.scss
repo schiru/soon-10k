@@ -32,6 +32,8 @@
     text-overflow: ellipsis;
     h3 {
       margin-bottom: 5px;
+			overflow: hidden;
+			text-overflow: ellipsis;
     }
   }
 }
