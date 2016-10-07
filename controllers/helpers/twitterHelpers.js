@@ -113,31 +113,11 @@ function convertLinksToHTML(status) {
 	let links = status.entities.urls;
 	let text = status.text;
 
-	console.log('original text', text);
-	console.log('links', links);
-	let indices = [0];
-	let htmlLinks = [];
-	let substrings = [];
-
 	links.forEach(link => {
-		indices = indices.concat(link.indices);
-		htmlLinks.push(createHTMLLink(link.display_url, link.url));
+		text = text.replace(link.url, createHTMLLink(link.display_url, link.url));
 	});
 
-	indices.push(text.length);
-
-	console.log('indices', indices);
-
-	for (let i = 1; i < indices.length; i++) {
-		substrings.push(text.substring(indices[i-1], indices[i]));
-	}
-
-	for (let i = 1; i < substrings.length && htmlLinks.length > 0; i += 2) {
-		substrings[i] = htmlLinks.shift();
-	}
-	console.log('substrings', substrings);
-
-	status.text = substrings.join('');
+	status.text = text;
 }
 
 module.exports = helpers;
