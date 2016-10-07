@@ -97,7 +97,47 @@ helpers.patchStatuses = function(twitterStatuses) {
 
 	twitterStatuses.forEach(status => {
 		status.created_at_relative = moment(new Date(status.created_at)).fromNow();
+		convertLinksToHTML(status);
 	});
 };
+
+function convertLinksToHTML(status) {
+	createHTMLLink = (displayUrl, url) => {
+		return `<a href="${url}" target="_blank">${displayUrl}</a>`
+	};
+
+	console.log('converting links');
+	if (!status || status.entities.urls.length == 0)
+		return;
+
+	let links = status.entities.urls;
+	let text = status.text;
+
+	console.log('original text', text);
+	console.log('links', links);
+	let indices = [0];
+	let htmlLinks = [];
+	let substrings = [];
+
+	links.forEach(link => {
+		indices = indices.concat(link.indices);
+		htmlLinks.push(createHTMLLink(link.display_url, link.url));
+	});
+
+	indices.push(text.length);
+
+	console.log('indices', indices);
+
+	for (let i = 1; i < indices.length; i++) {
+		substrings.push(text.substring(indices[i-1], indices[i]));
+	}
+
+	for (let i = 1; i < substrings.length && htmlLinks.length > 0; i += 2) {
+		substrings[i] = htmlLinks.shift();
+	}
+	console.log('substrings', substrings);
+
+	status.text = substrings.join('');
+}
 
 module.exports = helpers;
