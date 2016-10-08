@@ -122,12 +122,29 @@ nav.nav { // traditional nav bar
 }
 
 .t { // tweets container
-	flex-wrap: wrap;
+	@media (min-width: 768px) {
+		flex-wrap: wrap;
+	}
+
 
 	li {
 		flex-basis: 33%;
 		flex-shrink: 1;
 		flex-grow: 1;
+
+		h3 {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.body a {
+			color: $base-color-orange;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 }
 

@@ -33,9 +33,9 @@ helpers.getTweetsForCountdown = function(countdownId, hashtagsArray) {
 			}
 		}
 
-		if (cacheExists && !cacheExpired) {
+		if (cacheExists) {
 			if (cacheExpired) {
-				fetchTweets.then((tweets, response) => {
+				helpers.getTweetsForHashtags(hashtagsArray).then((tweets, response) => {
 					return helpers.cacheTweets(cacheExists, tweets, countdownId);
 				});
 			}
@@ -78,7 +78,7 @@ helpers.getTweetsForHashtags = function(hashtagsArray) {
 	let hashtagsQuery = hashtagsArray.join(' OR ') + ' lang:en';
 	console.log('requesting tweets for hashtags ' + hashtagsQuery);
 	return new Promise((resolve, reject) => {
-		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 9}, function(error, tweets, response) {
+		twitterClient.get('search/tweets', {q: hashtagsQuery, count: 6}, function(error, tweets, response) {
 		   if (error) {
 				 reject(error);
 				 return null;
@@ -97,7 +97,26 @@ helpers.patchStatuses = function(twitterStatuses) {
 
 	twitterStatuses.forEach(status => {
 		status.created_at_relative = moment(new Date(status.created_at)).fromNow();
+		convertLinksToHTML(status);
 	});
 };
+
+function convertLinksToHTML(status) {
+	createHTMLLink = (displayUrl, url) => {
+		return `<a href="${url}" target="_blank">${displayUrl}</a>`
+	};
+
+	if (!status || status.entities.urls.length == 0)
+		return;
+
+	let links = status.entities.urls;
+	let text = status.text;
+
+	links.forEach(link => {
+		text = text.replace(link.url, createHTMLLink(link.display_url, link.url));
+	});
+
+	status.text = text;
+}
 
 module.exports = helpers;
