@@ -10,3 +10,6 @@ Key features:
 - Persistent storage on server using SQLite
 
 This project was created by Thomas Jirout and Wolfgang Rumpler and submitted to the competition https://a-k-apart.com/.
+
+### Licence
+MIT
